@@ -94,11 +94,6 @@ See the [manual](hogehoge) for detailed instructions.
 
 ---
 
-## How to use sample programs
-
-
----
-
 ## How to link this library
 
 ### Shared library
