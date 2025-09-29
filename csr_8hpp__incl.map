@@ -1,0 +1,9 @@
+<map id="include/gsi_sminres/extras/sparse/csr.hpp" name="include/gsi_sminres/extras/sparse/csr.hpp">
+<area shape="rect" id="Node000001" title="Minimal CSR (Compressed Sparse Row) struct used by GSI&#45;sMINRES sample programs." alt="" coords="61,5,225,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,84,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,48,72,87,69,82,118,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="108,93,179,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,46,146,79,141,79,141,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="203,93,265,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="167,44,212,82,208,86,164,48"/>
+</map>

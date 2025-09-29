@@ -1,0 +1,9 @@
+<map id="include/gsi_sminres/algorithms/shift_invert_shifted_minres.hpp" name="include/gsi_sminres/algorithms/shift_invert_shifted_minres.hpp">
+<area shape="rect" id="Node000001" title="Header file for the Shift&#45;Invert preconditioned shifted MINRES method Solver class." alt="" coords="201,5,374,60"/>
+<area shape="rect" id="Node000002" href="$example__sis__csr_8cpp.html" title="Demo: Shift–Invert preconditioned shifted MINRES with CSR backends." alt="" coords="5,108,177,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,68,132,110,130,105,219,64"/>
+<area shape="rect" id="Node000003" href="$example__sis__zhp_8cpp.html" title="Demo: Shift–Invert preconditioned shifted MINRES with BLAS/LAPACK packed&#45;Hermitian (ZHP) backends." alt="" coords="201,108,373,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,74,290,108,285,108,285,74"/>
+<area shape="rect" id="Node000004" href="$shift__invert__shifted__minres_8cpp.html" title="Implementation of the shift&#45;invert preconditioned shifted minres method." alt="" coords="398,108,595,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="360,63,455,105,453,110,358,68"/>
+</map>

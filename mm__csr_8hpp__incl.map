@@ -1,0 +1,16 @@
+<map id="include/gsi_sminres/extras/io/mm_csr.hpp" name="include/gsi_sminres/extras/io/mm_csr.hpp">
+<area shape="rect" id="Node000001" title="I/O helpers: Matrix Market (symmetric/Hermitian) &#45;&gt; Compressed Sparse Row (CSR) for GSI&#45;sMINRES sampl..." alt="" coords="88,5,255,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,181,76,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,48,104,68,77,95,58,132,47,168,42,167,53,130,73,92,101,64,132,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="116,181,195,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,48,109,68,88,95,83,113,88,132,104,154,124,172,121,176,100,158,84,134,78,113,84,92,105,64,132,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="319,101,378,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="211,43,314,92,312,97,209,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="235,181,297,207"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="209,43,237,64,259,92,267,111,271,131,272,167,266,167,265,131,261,112,254,95,233,68,206,48"/>
+<area shape="rect" id="Node000006" href="$csr_8hpp.html" title="Minimal CSR (Compressed Sparse Row) struct used by GSI&#45;sMINRES sample programs." alt="" coords="99,93,244,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="174,46,174,79,169,79,169,46"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="141,136,73,176,70,172,138,131"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="170,134,163,168,158,167,165,133"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="196,131,243,170,239,174,193,136"/>
+</map>

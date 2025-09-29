@@ -1,0 +1,11 @@
+<map id="include/gsi_sminres/extras/io/mm_zhp.hpp" name="include/gsi_sminres/extras/io/mm_zhp.hpp">
+<area shape="rect" id="Node000001" title="I/O helpers: Matrix Market (symmetric/Hermitian) &#45;&gt; BLAS packed (ZHP) for GSI&#45;sMINRES samples." alt="" coords="308,5,479,45"/>
+<area shape="rect" id="Node000002" href="$example__gen__zhp_8cpp.html" title="Demo: Generalized shifted MINRES with ZHP storage and LAPACK packed&#45;Cholesky inner solves." alt="" coords="5,93,184,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="315,52,161,96,159,91,314,47"/>
+<area shape="rect" id="Node000003" href="$example__sis__zhp_8cpp.html" title="Demo: Shift–Invert preconditioned shifted MINRES with BLAS/LAPACK packed&#45;Hermitian (ZHP) backends." alt="" coords="209,93,381,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="363,56,318,95,315,91,360,52"/>
+<area shape="rect" id="Node000004" href="$example__std__zhp_8cpp.html" title="Demo: Standard shifted MINRES (no B) with BLAS packed&#45;Hermitian MVs." alt="" coords="405,93,579,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="427,52,472,91,468,95,424,56"/>
+<area shape="rect" id="Node000005" href="$mm__zhp_8cpp.html" title="Implementation of load_mm_zhp (Matrix Market &#45;&gt; BLAS ZHP)." alt="" coords="604,101,793,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="474,46,659,98,657,103,473,52"/>
+</map>

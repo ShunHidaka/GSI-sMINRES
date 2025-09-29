@@ -1,0 +1,14 @@
+<map id="include/gsi_sminres/extras/sparse/spmv.hpp" name="include/gsi_sminres/extras/sparse/spmv.hpp">
+<area shape="rect" id="Node000001" title="Sparse matrix–vector multiplication (SpMV): y &lt;&#45; A x for CSRMatrix." alt="" coords="87,5,269,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,181,68,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,48,68,67,53,80,40,95,33,112,30,131,33,168,28,168,25,131,28,111,36,92,49,76,65,62,101,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="100,181,179,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,44,213,86,216,110,211,134,195,158,174,176,170,172,191,154,206,132,211,110,208,87,189,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="233,181,304,207"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="197,44,231,92,250,131,263,167,258,169,245,133,226,95,192,47"/>
+<area shape="rect" id="Node000005" href="$csr_8hpp.html" title="Minimal CSR (Compressed Sparse Row) struct used by GSI&#45;sMINRES sample programs." alt="" coords="51,93,196,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="168,47,145,83,140,80,164,44"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="104,136,62,174,58,170,101,132"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="130,133,137,167,132,168,125,134"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="159,131,237,172,234,177,157,136"/>
+</map>

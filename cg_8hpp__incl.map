@@ -1,0 +1,14 @@
+<map id="include/gsi_sminres/extras/algorithms/cg.hpp" name="include/gsi_sminres/extras/algorithms/cg.hpp">
+<area shape="rect" id="Node000001" title="Unpreconditioned Conjugate Gradient (CG) solver; compatible with CSR storage." alt="" coords="92,5,280,45"/>
+<area shape="rect" id="Node000002" href="$csr_8hpp.html" title="Minimal CSR (Compressed Sparse Row) struct used by GSI&#45;sMINRES sample programs." alt="" coords="59,93,204,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,47,153,83,148,80,172,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,84,207"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="111,48,76,67,61,80,48,95,41,112,38,131,41,168,36,168,33,131,36,111,44,92,57,76,73,62,109,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="113,181,184,207"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="202,44,221,86,224,110,219,134,203,158,183,176,179,172,199,154,214,132,219,110,215,87,197,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="243,181,305,207"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="205,44,239,92,257,131,269,167,264,169,252,133,234,95,200,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,136,70,174,66,170,109,132"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="138,133,146,167,141,168,133,134"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="167,131,242,172,240,177,164,136"/>
+</map>

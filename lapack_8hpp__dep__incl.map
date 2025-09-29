@@ -1,0 +1,7 @@
+<map id="include/gsi_sminres/linalg/lapack.hpp" name="include/gsi_sminres/linalg/lapack.hpp">
+<area shape="rect" id="Node000001" title="LAPACK wrapper functions for the GSI&#45;sMINRES sample programs." alt="" coords="119,5,270,45"/>
+<area shape="rect" id="Node000002" href="$example__gen__zhp_8cpp.html" title="Demo: Generalized shifted MINRES with ZHP storage and LAPACK packed&#45;Cholesky inner solves." alt="" coords="5,93,184,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,56,119,95,115,91,160,52"/>
+<area shape="rect" id="Node000003" href="$example__sis__zhp_8cpp.html" title="Demo: Shift–Invert preconditioned shifted MINRES with BLAS/LAPACK packed&#45;Hermitian (ZHP) backends." alt="" coords="209,93,381,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,52,274,91,271,95,225,56"/>
+</map>

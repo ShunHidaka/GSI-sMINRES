@@ -1,0 +1,9 @@
+<map id="include/gsi_sminres/algorithms/standard_shifted_minres.hpp" name="include/gsi_sminres/algorithms/standard_shifted_minres.hpp">
+<area shape="rect" id="Node000001" title="Header file for the Standard shifted MINRES method Solver class." alt="" coords="213,5,370,60"/>
+<area shape="rect" id="Node000002" href="$example__std__csr_8cpp.html" title="Demo: Standard shifted MINRES (no B) with CSR SpMV." alt="" coords="5,108,180,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,68,134,110,132,105,222,63"/>
+<area shape="rect" id="Node000003" href="$example__std__zhp_8cpp.html" title="Demo: Standard shifted MINRES (no B) with BLAS packed&#45;Hermitian MVs." alt="" coords="204,108,379,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="294,74,294,108,289,108,289,74"/>
+<area shape="rect" id="Node000004" href="$standard__shifted__minres_8cpp.html" title="Implementation of the standard shifted minres method." alt="" coords="403,108,579,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,63,452,105,450,110,359,68"/>
+</map>

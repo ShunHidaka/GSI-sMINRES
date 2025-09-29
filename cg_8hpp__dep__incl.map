@@ -1,0 +1,7 @@
+<map id="include/gsi_sminres/extras/algorithms/cg.hpp" name="include/gsi_sminres/extras/algorithms/cg.hpp">
+<area shape="rect" id="Node000001" title="Unpreconditioned Conjugate Gradient (CG) solver; compatible with CSR storage." alt="" coords="97,5,285,45"/>
+<area shape="rect" id="Node000002" href="$example__gen__csr_8cpp.html" title="Demo: Generalized shifted MINRES (CSR backends; inner solves by CG)." alt="" coords="5,93,184,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,57,118,95,114,91,157,53"/>
+<area shape="rect" id="Node000003" href="$cg_8cpp.html" title="Unpreconditioned Conjugate Gradient (CG) implementation." alt="" coords="208,93,368,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,52,268,91,265,95,221,56"/>
+</map>
