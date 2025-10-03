@@ -5,15 +5,15 @@ A high-performance C++17 solver suite for multi-shift Hermitian linear systems (
 ## Overview
 
 GSI-sMINRES is a **shifted MINRES** solver suite implemented in C++17.  
-It efficiently solves **multiple shifts simultaneously** for matrices $A and B$ that are **real-symmetric** or **complex-Hermitian**. The project prioritizes performance, low memory footprint, and portability, exposing a simple C++ API backed by BLAS.
+It efficiently solves **multiple shifts simultaneously** for matrices $A$ and $B$ that are **real-symmetric** or **complex-Hermitian**. The project prioritizes performance, low memory footprint, and portability, exposing a simple C++ API backed by BLAS.
 
 **Standard shifted linear systems:**
 
-$$ (A + \sigma^{(m)} I)\,\boldsymbol{x}^{(m)} = \boldsymbol{b}, \quad (m=1,2,\dots,M) $$
+$$ (A + \sigma^{(m)} I)\,\mathbf{x}^{(m)} = \mathbf{b}, \quad (m=1,2,\dots,M) $$
 
 **Generalized shifted linear systems:**
 
-$$ (A + \sigma^{(m)} B)\,\boldsymbol{x}^{(m)} = \boldsymbol{b}, \quad (m=1,2,\dots,M) $$
+$$ (A + \sigma^{(m)} B)\,\mathbf{x}^{(m)} = \mathbf{b}, \quad (m=1,2,\dots,M) $$
 
 Provided solvers (three families):
 - **Standard shifted MINRES**
