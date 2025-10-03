@@ -111,7 +111,7 @@ if(GSI_SMINRES_BUILD_SHARED)
     OUTPUT_NAME gsi_sminres
     VERSION     ${PROJECT_VERSION}
     SOVERSION   1)
-  add_library(gsi_sminres::gsi_minres ALIAS gsi_sminres)
+  add_library(gsi_sminres::gsi_sminres ALIAS gsi_sminres)
 endif()
 
 if(GSI_SMINRES_BUILD_STATIC)

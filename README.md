@@ -1,147 +1,172 @@
 # GSI-sMINRES
 
----
+A high-performance C++17 solver suite for multi-shift Hermitian linear systems (MINRES-based).
 
 ## Overview
 
+GSI-sMINRES is a **shifted MINRES** solver suite implemented in C++17.  
+It efficiently solves **multiple shifts simultaneously** for large matrices **A and B that are real-symmetric (or complex-Hermitian)**. The project prioritizes performance, low memory footprint, and portability, exposing a simple C++ API backed by BLAS.
 
----
+**Standard shifted linear systems:**
+\[(A + \sigma^{(m)} I)\,\boldsymbol{x}^{(m)} = \boldsymbol{b}, \quad m=1,2,\dots,M\]
 
-## Requirement
+**Generalized shifted linear systems:**
+\[(A + \sigma^{(m)} B)\,\boldsymbol{x}^{(m)} = \boldsymbol{b}, \quad m=1,2,\dots,M\]
 
-- C++17 compiler
-- BLAS library
-- LAPACK library (required for sample programs, but **complication will fail without it in some BLAS/LAPACK**)
-- `make`
-- `CMake` (Storongly recommend)
+Provided solvers (three families):
+- **Standard shifted MINRES**
+- **Generalized shifted MINRES**
+- **Shift-Invert preconditioned shifted MINRES**
 
----
+> For algorithmic background, derivations, and comparisons among methods, see the “Algorithm” chapter in the Doxygen documentation.
 
 ## Documents
 
-- Manual ([HTML](https://shunhidaka.github.io/GSMINRESpp/)/PDF)
+- Manual ([HTML](https://shunhidaka.github.io/GSI-sMINRES/)/PDF)
 
 ---
 
-## Directory Structure
+## Requirements
+
+- C++17 compiler (GCC ≥ 9 / Clang ≥ 10 recommended)
+- **BLAS** (Netlib / OpenBLAS / MKL, etc.) — required by the core
+- **LAPACK** — used by examples / extras
+- CMake ≥ 3.18 and `make`
+- (Optional) OpenMP (depending on your BLAS and whether you parallelize SpMV)
+
+---
+
+## Directory Structure (excerpt)
 
 ```
-.
+GSI-sMINRES/
 ├── CMakeLists.txt
-├── Doxyfile
-├── README.md
-├── build
-├── cmake
-│   ├── gsi_sminresConfig.cmake.in
-├── examples
-│   ├── Makefile
-│   ├── data
-│   │   ├── download.sh
-│   ├── example_gen_csr.cpp
-│   ├── example_gen_zhp.cpp
-│   ├── example_sis_csr.cpp
-│   ├── example_sis_zhp.cpp
-│   ├── example_std_csr.cpp
-│   ├── example_std_zhp.cpp
-├── include
-│   ├── gsi_sminres
-│   │   ├── algorithms
-│   │   │   ├── generalized_shifted_minres.hpp
-│   │   │   ├── shift_invert_shifted_minres.hpp
-│   │   │   ├── standard_shifted_minres.hpp
-│   │   ├── extras
-│   │   │   ├── algorithms
-│   │   │   │   ├── cg.hpp
-│   │   │   │   ├── minres_pencil.hpp
-│   │   │   ├── io
-│   │   │   │   ├── mm_csr.hpp
-│   │   │   │   ├── mm_zhp.hpp
-│   │   │   ├── sparse
-│   │   │   │   ├── csr.hpp
-│   │   │   │   ├── spmv.hpp
-│   │   ├── gsi_sminres.hpp
-│   │   ├── linalg
-│   │   │   ├── blas.hpp
-│   │   │   ├── blas_zhpmv.hpp
-│   │   │   ├── lapack.hpp
-├── src
-│   ├── algorithms
-│   │   ├── generalized_shifted_minres.cpp
-│   │   ├── shift_invert_shifted_minres.cpp
-│   │   ├── standard_shifted_minres.cpp
-│   ├── extras
-│   │   ├── algorithms
-│   │   │   ├── cg.cpp
-│   │   │   ├── minres_pencil.cpp
-│   │   ├── io
-│   │   │   ├── mm_csr.cpp
-│   │   │   ├── mm_zhp.cpp
+├── include/gsi_sminres/
+│   ├── algorithms/        # standard / generalized / shift_invert
+│   ├── extras/            # io (MatrixMarket), sparse (CSR/SpMV), small algos
+│   └── linalg/            # BLAS/LAPACK wrappers
+├── src/                   # implementations
+└── examples/              # sample_*_{zhp,csr}.cpp + data/
 ```
 
 ---
 
-## Installation
+## Installation (CMake recommended)
 
-### Using CMake (recommended)
-``` bash
-mkdir build
+```bash
+# Configure & build
 cmake -S . -B build
-cd build/
-make           # Build sample programs and libraries
-make install   # Install to $HOME/gsminres_install by default
+cmake --build build -j
+
+# Install (default prefix e.g. $HOME/gsminres_install)
+cmake --install build
 ```
-See the [manual](hogehoge) for detailed instructions.
+
+### Common CMake Options
+
+| Option                               | Default                      | Description                  |
+|--------------------------------------|------------------------------|------------------------------|
+| `-DCMAKE_INSTALL_PREFIX=...`         | `"$HOME/gsminres_install"`   | Install destination          |
+| `-DGSI_SMINRES_BUILD_EXAMPLES=ON`    | `ON`                         | Build example programs       |
+| `-DUSE_OPENMP`                       | `ON`                         | Enable OpenMP if available.  |
+
+> If BLAS/LAPACK are not auto-detected, consider adding `CMAKE_PREFIX_PATH` or explicitly setting `BLAS_LIBRARIES` / `LAPACK_LIBRARIES`.
 
 ---
 
-## How to link this library
+## Quick Start
 
-### Shared library
-hogehoge
-``` bash
-# Standard Complication
-$ g++ myprog.cpp -
+### 1) Manual linking (g++)
+
+Assuming it is installed under `$HOME/gsminres_install`:
+```bash
+g++ -std=gnu++17 -O3 -march=native \
+  -I"$HOME/gsminres_install/include" \
+  myprog.cpp \
+  -L"$HOME/gsminres_install/lib" -lgsisminres \
+  -lblas -llapack \
+  -Wl,-rpath,"$HOME/gsminres_install/lib"
 ```
 
-### Static library
-ホームディレクトリに `gsi-sminres` がインストール済みであるとする
-``` bash
-# Standard Complication
-$ g++ -std=c++17 -O3 -I
+### 2) Use CMake (`find_package`)
+
+**`CMakeLists.txt` in your project**:
+```cmake
+cmake_minimum_required(VERSION 3.18)
+project(myapp CXX)
+
+find_package(gsi_sminres CONFIG REQUIRED)
+
+add_executable(myapp src/myapp.cpp)
+target_link_libraries(myapp PRIVATE gsi_sminres::gsi_sminres)
+```
+
+Build example:
+```bash
+cmake -S . -B build -DCMAKE_PREFIX_PATH="$HOME/gsminres_install"
+cmake --build build -j
 ```
 
 ---
 
-## API Summary
-See the [manual]().
+## Running the Examples
+
+This repository provides two example pathways: **ZHP (packed Hermitian, BLAS/LAPACK)** and **CSR (sparse, in-house SpMV/CG)**.
+You can fetch sample matrix data via `examples/data/download.sh`.
+
+```bash
+# Example: standard shift with the packed Hermitian (BLAS/LAPACK) pathway
+./build/example_std_zhp  examples/data/A.mtx
+
+# Example: generalized shift with the CSR (sparse) pathway
+./build/example_gen_csr  examples/data/A.mtx  examples/data/B.mtx
+
+# Example: shift-invert preconditioned
+./build/example_sis_zhp  examples/data/A.mtx  examples/data/B.mtx
+```
 
 ---
 
-## Known Issues
-- OpenBLAS versions prior to 0.3.27 has bug in the `zrotg`.
+## API Entry Points (overview)
+
+- Public headers: `include/gsi_sminres/...`  
+- Typical workflow:
+  1. Construct the solver (matrix size, number of shifts, etc.)
+  2. Initialize (initial guess, shift set, tolerances)
+  3. Provide **matrix–vector products** and **inner solves** as required by the chosen pathway
+  4. Iterate until convergence → obtain solution vectors and residual metrics
+
+> For exact function signatures and advanced controls (stopping criteria, multi-shift updates, etc.), please refer to the Doxygen manual.
+
+---
+
+## Known Notes
+
+- **OpenBLAS `zrotg`**: some versions prior to 0.3.27 have a known issue affecting complex Givens rotations.  
   - See: https://github.com/OpenMathLib/OpenBLAS/issues/4909
   - **Workarounds**
     - Update OpenBLAS version 0.3.27 or later.
     - Use an alternative BLAS implementation (e.g., Netlib BLAS or Interl MKL).
-    - Optionally, modify the source ~~~
 
 ---
 
-## Citation
-If you use this code, please cite:
-``` bibtex
-@article{
-  author  = {},
-  title   = {},
-  doi     = {},
-  journal = {},
-  volume  = {},
-  pages   = {},
-  year    = {}
+## License
+
+MIT License (see `LICENSE`).
+
+---
+
+## Acknowledgments & Citation
+
+If this library contributes to your research or products, please consider citing it.
+Before the preprint is released, you may use the following temporary BibTeX:
+
+```bibtex
+@misc{gsi_sminres,
+  author       = {},
+  title        = {},
+  howpublished = {},
+  year         = {},
+  note         = {}
 }
 ```
-
----
-
-## Licnse
-MIT License
