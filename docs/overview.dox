@@ -1,0 +1,52 @@
+/*! \page page-overview Overview
+GSI-sMINRES is a library of MINRES-based methods for solving **many shifted linear systems** on shared-memory/HPC environments.  
+We target Hermitian (real-symmetric) matrices \(A\) and Hermitian positive-definite matrices \(B\).
+
+## Problem classes
+- **Standard shifted systems**
+  \f[
+    (A+\sigma^{(m)} I)\,\boldsymbol{x}^{(m)} = \boldsymbol{b},
+    \qquad m=1,2,\dots,M.
+  \f]
+- **Generalized shifted systems**
+  \f[
+    (A+\sigma^{(m)} B)\,\boldsymbol{x}^{(m)} = \boldsymbol{b},
+    \qquad m=1,2,\dots,M.
+  \f]
+
+Here \(\{\sigma^{(m)}\}\subset\mathbb{C}\) are the shifts, \(I\) is the identity, and \(\boldsymbol{x}^{(m)}\) are the unknowns (bold for vectors).
+
+## Provided methods
+- \ref page-alg-std  "Standard shifted MINRES (sMINRES)"
+- \ref page-alg-gen  "Generalized shifted MINRES (gsMINRES)"
+- \ref page-alg-sis  "Shift–invert preconditioned shifted MINRES (SiS-MINRES)"
+
+A concise algorithmic summary for each method is given under \ref page-algorithms "Algorithms".
+
+## Assumptions & scope
+- \(A\) is Hermitian (real-symmetric allowed); \(B\) is Hermitian positive-definite.
+- Complex arithmetic is supported; real cases are covered as a subset.
+- Stopping criterion is typically the relative residual
+  \(\|\boldsymbol{r}_k\|/\|\boldsymbol{r}_0\|\le \texttt{rtol}\) (method pages detail the exact rule).
+
+## Data formats & I/O
+- **Sparse path:** CSR-based SpMV kernels (for large sparse matrices).
+- **Packed Hermitian path:** BLAS/LAPACK packed storage (e.g., ZHP) for dense/structured cases.
+- Example Matrix Market inputs and small drivers live under \c examples/ .
+
+## API layout (entry points)
+- \ref gsi_sminres::standard::Solver     "gsi_sminres::standard::Solver"
+- \ref gsi_sminres::generalized::Solver  "gsi_sminres::generalized::Solver"
+- \ref gsi_sminres::shift_invert::Solver "gsi_sminres::shift_invert::Solver"
+
+Each solver exposes a common high-level workflow (initialize → Lanczos pre/post or single step → per-shift update → finalize).  
+For a flow diagram, see \ref page-behavior "Library behavior image".
+
+## Performance at a glance
+- Per outer iteration: **1× SpMV** + a few BLAS Level-1 ops (e.g., \c zaxpy , \c zdotc ).
+- Shift handling is **scalar-only** (on-the-fly Givens) on top of the shared Lanczos basis.
+- With shift–invert, inner solves for \(A+\sigma_*B\) dominate; choose \(\sigma_*\) near the target region.
+
+## Quick navigation
+- \ref page-algorithms "Algorithms"  •  \ref page-install "Installation"  •  \ref page-license "License & Contacts"
+*/

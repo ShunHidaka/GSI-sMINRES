@@ -1,0 +1,33 @@
+/*!
+ * \mainpage GSI-sMINRES Documentation
+ *
+ * \brief Minimal landing page with links to each chapter.
+ *
+ * GSI-sMINRES is a library of MINRES-based methods for shifted linear systems
+ * with Hermitian \f$A\f$ and HPD \f$B\f$. The project provides three methods:
+ *
+ * ## Problem classes & provided methods
+ * - **Standard shifted linear systems:** \f$(A+\sigma^{(m)} I)\,\boldsymbol{x}^{(m)}=\boldsymbol{b}, \quad m=1,\dots,M.\f$
+ *   - \ref gsi_sminres::standard     "Standard shifted MINRES method (sMINRES)"
+ * - **Generalized shifted linear systems:** \f$(A+\sigma^{(m)} B)\,\boldsymbol{x}^{(m)}=\boldsymbol{b}, \quad m=1,\dots,M.\f$
+ *   - \ref gsi_sminres::generalized  "Generalized shifted MINRES method (gsMINRES)"
+ *   - \ref gsi_sminres::shift_invert "Shift–invert preconditioned shifted MINRES (sisMINRES)"
+ *
+ * ## Contents
+ * - \subpage page-overview
+ * - \subpage page-algorithms
+ *   - \ref page-alg-std "Standard shifted MINRES method"
+ *   - \ref page-alg-gen "Generalized shifted MINRES method"
+ *   - \ref page-alg-sis "Shift-invert preconditioned shifted MINRES method"
+ * - \subpage page-install
+ * - \subpage page-behavior
+ * - \subpage page-license
+ *
+ * \htmlonly
+ * <ul>
+ *   <li><a href="annotated.html">Detailed API documentation</a></li>
+ *   <li><a href="examples.html">Code examples</a></li>
+ * </ul>
+ * \endhtmlonly
+ *
+ */

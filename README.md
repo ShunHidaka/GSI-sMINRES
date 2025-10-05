@@ -48,7 +48,7 @@ GSI-sMINRES/
 │   ├── extras/            # io (MatrixMarket), sparse (CSR/SpMV), small algos
 │   └── linalg/            # BLAS/LAPACK wrappers
 ├── src/                   # implementations
-└── examples/              # sample_*_{zhp,csr}.cpp + data/
+└── examples/              # example_{std,gen,sis}_{zhp,csr}.cpp + data/
 ```
 
 ---
@@ -144,11 +144,11 @@ You can fetch sample matrix data via `examples/data/download.sh`.
 
 ## Known Notes
 
-- **OpenBLAS `zrotg`**: some versions prior to 0.3.27 have a known issue affecting complex Givens rotations.  
+- **OpenBLAS `zrotg`**: versions < 0.3.27 have a known issue affecting complex Givens rotations.  
   - See: https://github.com/OpenMathLib/OpenBLAS/issues/4909
   - **Workarounds**
     - Update OpenBLAS version 0.3.27 or later.
-    - Use an alternative BLAS implementation (e.g., Netlib BLAS or Interl MKL).
+    - Use an alternative BLAS implementation (e.g., Netlib BLAS or Intel MKL).
 
 ---
 
@@ -160,8 +160,7 @@ MIT License (see `LICENSE`).
 
 ## Acknowledgments & Citation
 
-If this library contributes to your research or products, please consider citing it.
-Before the preprint is released, you may use the following temporary BibTeX:
+If you use this code, please cite:
 
 ```bibtex
 @misc{gsi_sminres,
