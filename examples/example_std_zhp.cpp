@@ -1,6 +1,8 @@
 /**
  * \file example_std_zhp.cpp
  * \brief Demo: Standard shifted MINRES (no B) with BLAS packed-Hermitian MVs.
+ * \example example_std_zhp.cpp
+ * \author Shuntaro Hidaka
  *
  * \details
  * Solves \f$(A + \sigma^{(m)} I)x^{(m)} = b\f$ using the standard shifted

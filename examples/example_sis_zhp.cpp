@@ -2,6 +2,8 @@
  * \file example_sis_zhp.cpp
  * \brief Demo: Shift–Invert preconditioned shifted MINRES with BLAS/LAPACK
  *        packed-Hermitian (ZHP) backends.
+ * \example example_sis_zhp.cpp
+ * \author Shuntaro Hidaka
  *
  * \details
  * Solves \f$(A + \sigma^{(m)} B)x^{(m)} = b\f$ using the Shift–Invert

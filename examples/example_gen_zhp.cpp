@@ -2,6 +2,8 @@
  * \file example_gen_zhp.cpp
  * \brief Demo: Generalized shifted MINRES with ZHP storage and LAPACK
  *        packed-Cholesky inner solves.
+ * \example example_gen_zhp.cpp
+ * \author Shuntaro Hidaka
  *
  * \details
  * Solves \f$(A + \sigma^{(m)} B)x^{(m)} = b\f$ with \c A and \c B read into

@@ -1,6 +1,8 @@
 /**
  * \file example_gen_csr.cpp
  * \brief Demo: Generalized shifted MINRES (CSR backends; inner solves by CG).
+ * \example example_gen_csr.cpp
+ * \author Shuntaro Hidaka
  *
  * \details
  * Solves \f$(A + \sigma^{(m)} B)x^{(m)} = b\f$ for multiple complex shifts.

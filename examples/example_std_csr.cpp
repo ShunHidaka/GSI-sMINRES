@@ -1,6 +1,8 @@
 /**
  * \file example_std_csr.cpp
  * \brief Demo: Standard shifted MINRES (no B) with CSR SpMV.
+ * \example example_std_csr.cpp
+ * \author Shuntaro Hidaka
  *
  * \details
  * Solves a family of shifted systems \f$(A + \sigma^{(m)} I)x^{(m)} = b\f$

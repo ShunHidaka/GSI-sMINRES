@@ -1,6 +1,8 @@
 /**
  * \file example_sis_csr.cpp
  * \brief Demo: Shift–Invert preconditioned shifted MINRES with CSR backends.
+ * \example example_sis_csr.cpp
+ * \author Shuntaro Hidaka
  *
  * \details
  * Solves a batch of shifted linear systems
