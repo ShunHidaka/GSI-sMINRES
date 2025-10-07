@@ -1,0 +1,6 @@
+/*! \page page-alg-std Standard shifted MINRES method
+ *
+ * \image html  docs/img/alg-sminres.png  "Standard shifted MINRES method" width=600
+ * \image latex docs/img/alg-sminres.png  "Standard shifted MINRES method" width=0.8\textwidth
+ *
+ */

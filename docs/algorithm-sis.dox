@@ -1,0 +1,6 @@
+/*! \page page-alg-sis Shift-invert preconditioned shifted MINRES method
+ *
+ * \image html  docs/img/alg-sisminres.png  "Shift-invert preconditioned shifted MINRES method" width=600
+ * \image latex docs/img/alg-sisminres.png  "Shift-invert preconditioned shifted MINRES method" width=0.8\textwidth
+ *
+ */

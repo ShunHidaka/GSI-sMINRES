@@ -62,7 +62,9 @@ namespace gsi_sminres {
     }
 
 
-    void Solver::lanczos(std::vector<std::complex<double>>& v) noexcept {
+    void Solver::lanczos(std::vector<std::complex<double>>& v,
+                         const std::vector<std::complex<double>>& Av) noexcept {
+      linalg::blas::zcopy(matrix_size_, Av, 0, v, 0);
       alpha_ = std::real(linalg::blas::zdotc(matrix_size_, v_curr_, 0, v, 0));
       linalg::blas::zaxpy(matrix_size_, -alpha_,     v_curr_, 0, v, 0);
       linalg::blas::zaxpy(matrix_size_, -beta_prev_, v_prev_, 0, v, 0);

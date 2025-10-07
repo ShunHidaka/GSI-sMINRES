@@ -1,6 +1,6 @@
 /*! \page page-overview Overview
 GSI-sMINRES is a library of MINRES-based methods for solving **many shifted linear systems** on shared-memory/HPC environments.  
-We target Hermitian (real-symmetric) matrices \(A\) and Hermitian positive-definite matrices \(B\).
+We target Hermitian (real-symmetric) matrices \f$A\f$ and Hermitian positive-definite matrices \f$B\f$.
 
 ## Problem classes
 - **Standard shifted systems**
@@ -14,7 +14,7 @@ We target Hermitian (real-symmetric) matrices \(A\) and Hermitian positive-defin
     \qquad m=1,2,\dots,M.
   \f]
 
-Here \(\{\sigma^{(m)}\}\subset\mathbb{C}\) are the shifts, \(I\) is the identity, and \(\boldsymbol{x}^{(m)}\) are the unknowns (bold for vectors).
+Here \f$\sigma^{(m)} \in \mathbb{C}\f$ are the shifts, \f$I\f$ is the identity, and \f$\boldsymbol{x}^{(m)}\f$ are the unknowns (bold for vectors).
 
 ## Provided methods
 - \ref page-alg-std  "Standard shifted MINRES (sMINRES)"
@@ -24,15 +24,10 @@ Here \(\{\sigma^{(m)}\}\subset\mathbb{C}\) are the shifts, \(I\) is the identity
 A concise algorithmic summary for each method is given under \ref page-algorithms "Algorithms".
 
 ## Assumptions & scope
-- \(A\) is Hermitian (real-symmetric allowed); \(B\) is Hermitian positive-definite.
+- \f$A\f$ is Hermitian (real-symmetric allowed); \f$B\f$ is Hermitian positive-definite.
 - Complex arithmetic is supported; real cases are covered as a subset.
 - Stopping criterion is typically the relative residual
-  \(\|\boldsymbol{r}_k\|/\|\boldsymbol{r}_0\|\le \texttt{rtol}\) (method pages detail the exact rule).
-
-## Data formats & I/O
-- **Sparse path:** CSR-based SpMV kernels (for large sparse matrices).
-- **Packed Hermitian path:** BLAS/LAPACK packed storage (e.g., ZHP) for dense/structured cases.
-- Example Matrix Market inputs and small drivers live under \c examples/ .
+  \f$\|\boldsymbol{r}_k\|/\|\boldsymbol{r}_0\|\le \texttt{rtol}\f$ (method pages detail the exact rule).
 
 ## API layout (entry points)
 - \ref gsi_sminres::standard::Solver     "gsi_sminres::standard::Solver"
@@ -42,10 +37,27 @@ A concise algorithmic summary for each method is given under \ref page-algorithm
 Each solver exposes a common high-level workflow (initialize → Lanczos pre/post or single step → per-shift update → finalize).  
 For a flow diagram, see \ref page-behavior "Library behavior image".
 
-## Performance at a glance
-- Per outer iteration: **1× SpMV** + a few BLAS Level-1 ops (e.g., \c zaxpy , \c zdotc ).
-- Shift handling is **scalar-only** (on-the-fly Givens) on top of the shared Lanczos basis.
-- With shift–invert, inner solves for \(A+\sigma_*B\) dominate; choose \(\sigma_*\) near the target region.
+## Data formats & I/O
+**Library core is format-agnostic.** The solvers operate on vector-level BLAS
+updates internally; users are expected to supply the required operators:
+- \f$ \boldsymbol{y} \leftarrow A \boldsymbol{x} \f$ (matrix–vector product)
+- For generalized / sis variants, \f$\boldsymbol{y} \leftarrow B^{-1}\boldsymbol{x}\f$ / \f$\boldsymbol{y} \leftarrow (A + \omega B)^{-1}\boldsymbol{x}\f$.
+
+To make examples immediately runnable, we provide minimal utilities for two
+common paths:
+
+- **CSR (sparse) path** — for large sparse systems  
+  Headers under `extras/{io,sparse}` offer Matrix Market loaders and SpMV:  
+  e.g. `load_mm_csr(...)` and CSR SpMV helpers (see `mm_csr.hpp`, `csr.hpp`, `spmv.hpp`).  
+
+- **Packed Hermitian (BLAS/LAPACK) path** — for densd HPD systems  
+  Matrix Market → packed storage via `load_mm_zhp(...)`, then call BLAS/LAPACK
+  (e.g., `zhpmv`, `zpptrf`/`zpptrs`) through the lightweight wrappers
+  (see `blas_zhpmv.hpp`, `lapack.hpp`, `mm_zhp.hpp`). This path is used by
+  the ZHP-based examples.
+
+Example inputs and small drivers live under `examples/`. Check the corresponding
+headers for exact function signatures.
 
 ## Quick navigation
 - \ref page-algorithms "Algorithms"  •  \ref page-install "Installation"  •  \ref page-license "License & Contacts"

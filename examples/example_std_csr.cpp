@@ -65,12 +65,10 @@ int main(int argc, char* argv[]) {
   std::vector<double>      res(M);
 
   gsi_sminres::standard::Solver solver(N, M);
-  gsi_sminres::linalg::blas::zcopy(N, b, 0, v, 0);
   solver.initialize(x, b, v, sigma, 1e-12);
   for (std::size_t j = 0; j < 10*N; ++j) {
     gsi_sminres::sparse::SpMV(A, v, Av);
-    solver.lanczos(Av);
-    gsi_sminres::linalg::blas::zcopy(N, Av, 0, v, 0);
+    solver.lanczos(v, Av);
     if (solver.update(x)) {
       break;
     }

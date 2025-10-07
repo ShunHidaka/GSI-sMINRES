@@ -78,9 +78,12 @@ namespace gsi_sminres {
       /**
        * \brief Perform the Lanczos process.
        * \details The caller computes \f$ v \leftarrow A v \f$ and passes it here.
-       * \param[in,out] v Vector containing \f$ v = Av \f$ (size = N).
+       * \param[out] v   Output buffer (size = N). On entry, its contents are ignored;
+       *                 on exit, \f$v_{\mathrm{next}}\f$ is written.
+       * \param[in]  Av  Vector containing \f$ Av \rightarrow A*v \f$ (size = N).
        */
-      void lanczos(std::vector<std::complex<double>>& v) noexcept;
+      void lanczos(std::vector<std::complex<double>>& v,
+                   const std::vector<std::complex<double>>& Av) noexcept;
 
       /**
        * \brief Update the approximate solutions and check convergence.
