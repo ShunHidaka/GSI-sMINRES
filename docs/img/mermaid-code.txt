@@ -1,0 +1,38 @@
+https://mermaid.live/
+
+* Standard shifted MINRES method
+flowchart TD
+  I0["standard::Solver solver(N, M)"]
+  I0 --> I1["solver.initialize(x, b, v, sigma, rtol)"]
+  I1 --> A1["$$ Av \leftarrow A \cdot v $$"]
+  A1 --> A2["solver.lanczos(Av)"]
+  A2 --> Q{"solver.update(x) returns true?"}
+  Q -- true  --> F["solver.finalize(itr, res)"]
+  Q -- false --> A1
+
+* Generalized shifted MINRES method
+flowchart TD
+  I0["generalized::Solver solver(N, M)"] 
+  I0 --> P0["$$ w \leftarrow B^{-1}\, b $$"]
+  P0 --> I1["solver.initialize(x, b, w, sigma, rtol)"]
+  I1 --> A1["$$ u \leftarrow A \cdot w $$"]
+  A1 --> A2["solver.glanczos_pre(u)"]
+  A2 --> A3["$$ w \leftarrow B^{-1}\, u $$"]
+  A3 --> A4["solver.glanczos_pst(w, u)"]
+  A4 --> Q{"solver.update(x) returns true?"}
+  Q -- true  --> F["solver.finalize(itr, res)"]
+  Q -- false --> A1
+
+* Shift-invert preconditioned shifted MINRES method
+flowchart TD
+  I0["shift_invert::Solver solver(N, M)"] 
+  I0 --> P0["$$ v \leftarrow (A + \omega B)^{-1}\, b $$"]
+  P0 --> P1["$$ Bv \leftarrow B \cdot v $$"]
+  P1 --> I1["solver.initialize(x, v, Bv, sigma, rtol)"]
+  I1 --> A1["$$ v \leftarrow (A + \omega B)^{-1}\, Bv $$"]
+  A1 --> A2["solver.sislanczos_pre(v, Bv)"]
+  A2 --> A3["$$ Bv \leftarrow B \cdot v $$"]
+  A3 --> A4["solver.sislanczos_pst(v, Bv)"]
+  A4 --> Q{"solver.update(x) returns true?"}
+  Q -- true  --> F["solver.finalize(itr, res)"]
+  Q -- false --> A1

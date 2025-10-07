@@ -1,32 +1,18 @@
-/*! \page page-behavior Solver behavior
+/*! \page page-behavior Usage Workflow
  *
  * \section sec-beh-std Standard shifted MINRES method
  * \image html  img/beh-sminres.png width=600mm
  * \image latex img/beh-sminres.png width=0.8\textwidth
  *
+ *
  * \section sec-beh-gen Generalized shifted MINRES method
+ * \image html  img/beh-gsminres.png width=600mm
+ * \image latex img/beh-gsminres.png width=0.8\textwidth
  *
  *
  * \section sec-beh-sis Shift-invert preconditioned shifted MINRES method
+ * \image html  img/beh-sisminres.png width=600mm
+ * \image latex img/beh-sisminres.png width=0.8\textwidth
  *
- *
- *
- * \cond HIDE_MERMAID_CODE
- *Standard shifted MINRES method
- *flowchart TD
- *  I0["standard::Solver solver(N, M)"]
- *  I0 --> I1["solver.initialize(x, b, v, sigma, rtol)"]
- *  I1 --> A1["Av <- A * v"]
- *  A1 --> A2["solver.lanczos(Av)"]
- *  A2 --> Q{"solver.update(x) returns true?"}
- *  Q -- true  --> F["solver.finalize(itr, res)"]
- *  Q -- false --> A1
- *Generalized shifted MINRES method
- *flowchart TD
- *  I0
- *Shift-invert preconditioned shifted MINRES method
- *flowchart TD
- *  I0
- * \endcond
  *
  */
