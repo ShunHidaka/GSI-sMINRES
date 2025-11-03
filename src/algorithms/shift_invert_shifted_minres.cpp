@@ -20,7 +20,7 @@ namespace gsi_sminres {
         r0_norm_(0.0),
         rtol_(1e-12),
         sigma_(shift_size, {0.0, 0.0}),
-        omega_({0.0, 0.0}),
+        omega_(0.0),
         alpha_(0.0),
         beta_prev_(0.0),
         beta_curr_(0.0),
@@ -46,7 +46,7 @@ namespace gsi_sminres {
                             std::vector<std::complex<double>>& v,
                             std::vector<std::complex<double>>& Bv,
                             const std::vector<std::complex<double>>& sigma,
-                            const std::complex<double> omega,
+                            const double omega,
                             const double rtol) {
       std::fill(x.begin(), x.end(), std::complex<double>{0.0,0.0});
       r0_norm_ = std::sqrt( std::max(0.0, std::real(linalg::blas::zdotc(matrix_size_, v, 0, Bv, 0))) );

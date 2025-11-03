@@ -63,26 +63,26 @@ namespace gsi_sminres {
 
       /**
        * \brief Initialize the solver with input data and prepare for iteration.
-       * \details The caller prepares: \f$ v <- (A + \omega B)^{-1} b, Bv <- B v \f$.
+       * \details The caller prepares: \f$ v \to (A + \omega B)^{-1} b, Bv \to B v \f$.
        * \param[out] x     Approximate solutions (row-major, x[m*N+i] size = matrix_size * shift_size).
        * \param[out] v     Pre-processed right-hand side \f$ (A + \omega B)^{-1}b \f$ (size = matrix_size).
        * \param[out] Bv    Vector to which is matrix-vector multiplication is applied (Bv <- B * v).
        * \param[in]  sigma Vector of shift parameters (size = shift_size).
-       * \param[in]  omega Shift-Invert parameter.
+       * \param[in]  omega Shift-Invert parameter (real).
        * \param[in]  rtol  Convergence tolerance for relative residuals.
        */
       void initialize(std::vector<std::complex<double>>& x,
                       std::vector<std::complex<double>>& v,
                       std::vector<std::complex<double>>& Bv,
                       const std::vector<std::complex<double>>& sigma,
-                      const std::complex<double> omega,
+                      const double omega,
                       const double rtol);
 
       /**
        * \brief Applies the "pre" stage of M-inner-product Lanczos (steps 3.1 -- 3.4).
-       * \details The caller prepares: \f$ v <- (A + \omega B)^{-1} B v_j\f$ and provides \f$ Bv_j \f$.
-       * \param[in]    Bv Vector to which is matrix-vector multiplication is applied (Bv <- B * v).
-       * \param[in,out] v Vector to which is applied the operator \f$ (A + \omega B)^{-1} B \f$ (v <- (A + omega B)^{-1} Bv) (size = N).
+       * \details The caller prepares: \f$ v \to (A + \omega B)^{-1} B v_j\f$ and provides \f$ Bv_j \f$.
+       * \param[in]    Bv Vector to which is matrix-vector multiplication is applied (Bv \f$ \to \f$ B * v).
+       * \param[in,out] v Vector to which is applied the operator \f$ (A + \omega B)^{-1} B \f$ (v \f$ \to \f$ (A + omega B)^{-1} Bv) (size = N).
        */
       void sislanczos_pre(std::vector<std::complex<double>>& v,
                           const std::vector<std::complex<double>>& Bv) noexcept;
@@ -129,7 +129,7 @@ namespace gsi_sminres {
       double r0_norm_{};                          ///< Norm of initial residual \f$ ||r_0|| \f$
       double rtol_{};                             ///< Relative residual convergence tolerance
       std::vector<std::complex<double>> sigma_{}; ///< Shift values \f$ \sigma^{(m)} \f$
-      std::complex<double> omega_{};               ///< Shift-Invert parameter \f$ \omega \f$
+      double omega_{};                            ///< Shift-Invert parameter \f$ \omega \f$
 
       // Generalized Lanczos scalars / vectors
       double alpha_{};                   ///< alpha coefficient
