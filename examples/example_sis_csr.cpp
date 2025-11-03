@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
   std::size_t inner_iters; double inner_relres;
 
   // Constructing shift-invert preconditioner
-  const std::complex<double> omega = 0.0;
+  const double omega = 0.0;
 
   gsi_sminres::shift_invert::Solver solver(N, M);
   gsi_sminres::extras::minres_pencil(A, omega, B, v, b, N, 1e-13, &inner_iters, &inner_relres);

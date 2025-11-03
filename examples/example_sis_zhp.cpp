@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
   std::vector<double>      res(M);
 
   // Constructing shift-invert preconditioner
-  const std::complex<double> omega = 0.0;
+  const double omega = 0.0;
   const char uploS = [&]() -> char {
     if (uploA != uploB)
       throw std::runtime_error("uploA != uploB.");
