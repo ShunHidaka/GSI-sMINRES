@@ -149,6 +149,25 @@ namespace gsi_sminres {
 
       // ========== Level-1: axpy ==========
       /**
+       * \brief Perform \f$ y \leftarrow \alpha x + y \f$ for Real vector
+       * \param[in]     n        Number of elements to perform (length).
+       * \param[in]     alpha    Scalar multiplier.
+       * \param[in]     x        Input vector.
+       * \param[in]     x_offset Starting index within the x vector.
+       * \param[in,out] y        Output vector (accumulated).
+       * \param[in]     y_offset Starting index within the y vector.
+       * \param[in]     incx     Step size between elements in the x vector.
+       * \param[in]     incy     Step size between elements in the y vector.
+       */
+      inline void daxpy(std::size_t n, double alpha,
+                        const std::vector<double>& x, std::size_t x_offset,
+                        std::vector<double>&       y, std::size_t y_offset,
+                        std::size_t incx=1, std::size_t incy=1) noexcept {
+        const blas_int nn = to_blas_int(n);
+        const blas_int ix = to_blas_int(incx), iy = to_blas_int(incy);
+        cblas_daxpy(nn, alpha, x.data()+x_offset, ix, y.data()+y_offset, iy);
+      }
+      /**
        * \brief Perform \f$ y \leftarrow \alpha x + y \f$ for complex vector
        * \param[in]     n        Number of elements to perform (length).
        * \param[in]     alpha    Scalar multiplier.
@@ -169,6 +188,25 @@ namespace gsi_sminres {
       }
 
       // ========== Level-1: dot ==========
+      /**
+       * \brief Compute dot product of Real vectors: \f$ \sum_{i=0}^{n-1} x_i  y_i \f$.
+       * \param[in] n        Number of elements to compute.
+       * \param[in] x        First input vector.
+       * \param[in] x_offset Starting index within the x vector.
+       * \param[in] y        Second input vector.
+       * \param[in] y_offset Starting index within the y vector.
+       * \param[in]  incx    Step size between elements in the x vector.
+       * \param[in]  incy    Step size between elements in the y vector.
+       * \return Real scalar result.
+       */
+      inline double ddot(std::size_t n,
+                         const std::vector<double>& x, std::size_t x_offset,
+                         const std::vector<double>& y, std::size_t y_offset,
+                         std::size_t incx=1, std::size_t incy=1) noexcept {
+        const blas_int nn = to_blas_int(n);
+        const blas_int ix = to_blas_int(incx), iy = to_blas_int(incy);
+        return cblas_ddot(nn, x.data()+x_offset, ix, y.data()+y_offset, iy);
+      }
       /**
        * \brief Compute dot product of complex vectors: \f$ \sum_{i=0}^{n-1} \overline{x_i}  y_i \f$.
        * \param[in] n        Number of elements to compute.
@@ -192,6 +230,21 @@ namespace gsi_sminres {
       }
 
       // ========== Level-1: nrm2 ==========
+      /**
+       * \brief Compute the Euclidean norm (2-norm) of a real vector: \f$ \|x\|_2 \f$.
+       * \param[in] n        Number of elements to compute.
+       * \param[in] x        Input vector.
+       * \param[in] x_offset Starting index within the x vector.
+       * \param[in] incx     Step size between elements in the x vector.
+       * \return 2-norm value (double).
+       */
+      inline double dnrm2(std::size_t n,
+                           const std::vector<double>& x, std::size_t x_offset=0,
+                           std::size_t incx=1) noexcept {
+        const blas_int nn = to_blas_int(n);
+        const blas_int ix = to_blas_int(incx);
+        return cblas_dnrm2(nn, x.data()+x_offset, ix);
+      }
       /**
        * \brief Compute the Euclidean norm (2-norm) of a complex vector: \f$ \|x\|_2 \f$.
        * \param[in] n        Number of elements to compute.

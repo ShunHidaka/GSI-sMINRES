@@ -23,7 +23,7 @@ namespace gsi_sminres {
   namespace io {
 
     /**
-     * \brief Load Matrix Market (real-symmetric or complex-Hermitian, coordinate) and return a full CSR matrix.
+     * \brief Load Matrix Market (real-symmetric or complex-Hermitian, coordinate) and return a full complex-valued CSR matrix.
      * \param[in]  filename  Path to the Matrix Market (.mtx) file.
      * \param[out] n         Matrix order (n x n).
      * \return CSRMatrix.
@@ -39,6 +39,23 @@ namespace gsi_sminres {
      */
     gsi_sminres::sparse::CSRMatrix load_mm_csr(const std::string& filename,
                                                std::size_t&       size);
+
+    /**
+     * \brief Load Matrix Market (real-symmetric coordinate) and return a full real-valued CSR matrix.
+     * \param[in]  filename  Path to the Matrix Market (.mtx) file.
+     * \param[out] n         Matrix order (n x n).
+     * \return CSRMatrix.
+     *
+     * \note
+     *   - Only real symmetric kinds are supported.
+     *   - Duplicate entries are summed.
+     *
+     * \note Error handling policy:
+     *        This function may terminate the program on severe I/O/format errors in the
+     *        sample implementation. In production code, consider throwing exceptions instead.
+     */
+    gsi_sminres::sparse::CSRMatrix_r load_mm_csr_r(const std::string& filename,
+                                                   std::size_t&       size);
 
   }  // namespace io
 }  // namespace gsi_minres

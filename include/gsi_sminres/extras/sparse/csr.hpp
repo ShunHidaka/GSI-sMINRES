@@ -38,7 +38,7 @@ namespace gsi_sminres {
   namespace sparse {
 
     /**
-     * \brief CSR sparse matrix (square).
+     * \brief Complex-valued CSR sparse matrix (square).
      * \details nnz := Number of NonZero elements.
      */
     struct CSRMatrix {
@@ -47,7 +47,18 @@ namespace gsi_sminres {
       std::vector<std::size_t> col_idx;         ///< column index array (size = nnz).
       std::vector<std::complex<double>> values; ///< Nonzero values array (size = nnz, aligned with col_idx).
     };
-    
+
+    /**
+     * \brief Real-valued CSR sparse matrix (square).
+     * \details nnz := Number of NonZero elements.
+     */
+    struct CSRMatrix_r {
+      std::size_t n;                    ///< matrix dimension (n x n, 0-based).
+      std::vector<std::size_t> row_ptr; ///< row pointer array (size = n+1, 0-based).
+      std::vector<std::size_t> col_idx; ///< column index array (size = nnz).
+      std::vector<double> values;       ///< Nonzero values array (size = nnz, aligned with col_idx).
+    };
+
   }  // namespace sparse
 }  // namespace gsi_sminres
 

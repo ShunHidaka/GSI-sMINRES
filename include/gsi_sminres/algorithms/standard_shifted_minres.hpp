@@ -63,7 +63,7 @@ namespace gsi_sminres {
 
       /**
        * \brief Initialize the solver with input data and prepare for iteration.
-       * \param[out] x     Approximate solutions (row-major, x[m*N+i] size = matrix_size * shift_size).
+       * \param[out] x     Approximate solutions (row-major, x[m*N+i], size = matrix_size * shift_size).
        * \param[in]  b     Right-hand side vector (size = matrix_size).
        * \param[out] v     v <- b / ||b||
        * \param[in]  sigma Vector of shift parameters (size = shift_size).
@@ -74,16 +74,41 @@ namespace gsi_sminres {
                       std::vector<std::complex<double>>& v,
                       const std::vector<std::complex<double>>& sigma,
                       const double rtol);
+      /**
+       * \brief Real-valued variant of initialize for real A and real b.
+       *
+       * \param[out] x     Approximate solutions (row-major, x[m*N+i], size = matrix_size * shift_size).
+       * \param[in]  b     Real right-hand side vector (size = matrix_size).
+       * \param[out] v     Real Lanczos vector v <- b / ||b|| (size = matrix_size).
+       * \param[in]  sigma Shift parameters.
+       * \param[in]  rtol  Convergence tolerance.
+       */
+      void initialize_r(std::vector<std::complex<double>>& x,
+                        const std::vector<double>&         b,
+                        std::vector<double>&               v,
+                        const std::vector<std::complex<double>>& sigma,
+                        const double rtol);
 
       /**
        * \brief Perform the Lanczos process.
-       * \details The caller computes \f$ v \leftarrow A v \f$ and passes it here.
+       * \details The caller computes \f$ v \leftarrow A*v \f$ and passes it here.
        * \param[out] v   Output buffer (size = N). On entry, its contents are ignored;
        *                 on exit, \f$v_{\mathrm{next}}\f$ is written.
        * \param[in]  Av  Vector containing \f$ Av \rightarrow A*v \f$ (size = N).
        */
       void lanczos(std::vector<std::complex<double>>& v,
                    const std::vector<std::complex<double>>& Av) noexcept;
+      /**
+       * \brief Real-valued Lanczos process for real matrices A and vectors.
+       *
+       * \details The caller computes \f$Av\f$ with real arithmetic and passes it
+       *          as \p Av. This method updates the real Lanczos basis internally.
+       *
+       * \param[in,out] v  Real work vector, overwritten during the recurrence.
+       * \param[in]     Av Result of the matrix–vector product \f$Av\f$.
+       */
+      void lanczos_r(std::vector<double>&       v,
+                     const std::vector<double>& Av) noexcept;
 
       /**
        * \brief Update the approximate solutions and check convergence.
@@ -119,10 +144,15 @@ namespace gsi_sminres {
       double rtol_{};                             ///< Relative residual convergence tolerance
       std::vector<std::complex<double>> sigma_{}; ///< Shift values \f$ \sigma^{(m)} \f$
 
-      // Generalized Lanczos scalars / vectors
+      // Lanczos scalars / vectors
       double alpha_{};                   ///< alpha coefficient
       double beta_prev_{}, beta_curr_{}; ///< beta coefficients (previous and current)
       std::vector<std::complex<double>> v_prev_, v_curr_, v_next_; ///< Lanczos basis vectors
+      // Real-valued Lanczos mode and work vectors (allocated lazily).
+      bool real_lanczos_mode_{false}; ///< true if real-valued Lanczos is used
+      std::vector<double> v_prev_r_;  ///< Real Lanczos basis v_{k-1}
+      std::vector<double> v_curr_r_;  ///< Real Lanczos basis v_{k}
+      std::vector<double> v_next_r_;  ///< Real Lanczos basis v_{k+1}
 
       // tridiagonal / Givens data for MINRES updates
       /**
