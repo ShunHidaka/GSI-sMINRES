@@ -35,6 +35,7 @@
 #include <cmath>
 #include <complex>
 #include <vector>
+#include <chrono>
 
 int main(int argc, char* argv[]) {
   // Matrix size, Shift size
@@ -62,6 +63,8 @@ int main(int argc, char* argv[]) {
   std::vector<std::size_t> itr(M);
   std::vector<double>      res(M);
 
+  auto start = std::chrono::high_resolution_clock::now();
+
   gsi_sminres::standard::Solver solver(N, M);
   solver.initialize(x, b, v, sigma, 1e-12);
   for (std::size_t j = 0; j < 10*N; ++j) {
@@ -74,7 +77,11 @@ int main(int argc, char* argv[]) {
   }
   solver.finalize(itr, res);
 
+  auto end = std::chrono::high_resolution_clock::now();
+
   // Output results
+  double sec = std::chrono::duration<double>(end - start).count();
+  std::cout << "# time = " << sec << " s" << std::endl;
   for (std::size_t m = 0; m < M; ++m) {
     std::vector<std::complex<double>> ans(x.begin()+m*N, x.begin()+(m+1)*N);
     std::vector<std::complex<double>> tmp(N, {0.0, 0.0});

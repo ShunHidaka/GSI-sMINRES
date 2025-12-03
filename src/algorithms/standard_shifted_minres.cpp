@@ -81,7 +81,7 @@ namespace gsi_sminres {
         return;
       }
       v_prev_r_.assign(matrix_size_, 0.0);
-      v_curr_r_.resize(matrix_size_);
+      v_curr_r_.assign(matrix_size_, 0.0);
       v_next_r_.assign(matrix_size_, 0.0);
       linalg::blas::dcopy(matrix_size_, b, 0, v_curr_r_, 0);
       linalg::blas::dscal(matrix_size_, 1.0/r0_norm_, v_curr_r_);
