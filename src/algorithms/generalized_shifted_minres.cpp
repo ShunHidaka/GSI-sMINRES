@@ -189,7 +189,9 @@ namespace gsi_sminres {
 
     void Solver::finalize(std::vector<std::size_t>& conv_itr,
                           std::vector<double>&      conv_res) const{
-      conv_itr = conv_iter_;
+      //conv_itr = conv_iter_;
+      for (std::size_t m = 0; m < shift_size_; ++m)
+        conv_itr[m] = (is_conv_[m] != 0u) ? conv_iter_[m] : iter_;
       conv_res = h_;
     }
 

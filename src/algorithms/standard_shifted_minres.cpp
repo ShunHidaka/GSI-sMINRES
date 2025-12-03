@@ -176,7 +176,9 @@ namespace gsi_sminres {
                           std::vector<double>&      conv_res) const {
       // 当初はメモリの解放などを行う予定だったが
       // (動的な確保をおこなっていないため)不要なので収束までの反復回数と残差のノルムを返す関数とする
-      conv_itr = conv_iter_;
+      //conv_itr = conv_iter_;
+      for (std::size_t m = 0; m < shift_size_; ++m)
+        conv_itr[m] = (is_conv_[m] != 0u) ? conv_iter_[m] : iter_;
       conv_res = h_;
     }
 
