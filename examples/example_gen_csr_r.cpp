@@ -55,19 +55,19 @@ int main(int argc, char* argv[]) {
     return 1;
   }
   std::string Aname = argv[1], Bname = argv[2];
-  const auto A = gsi_sminres::io::load_mm_csr(Aname, N);
-  const auto B = gsi_sminres::io::load_mm_csr(Bname, N);
+  const auto A = gsi_sminres::io::load_mm_csr_r(Aname, N);
+  const auto B = gsi_sminres::io::load_mm_csr_r(Bname, N);
   // Prepare shifts
   std::vector<std::complex<double>> sigma(M);
   for (std::size_t m = 0; m < M; ++m) {
     sigma[m] = std::polar(0.01, 2*std::acos(-1)*(m+0.5)/M);
   }
   // Prepare rhs
-  std::vector<std::complex<double>> b(N, {1.0, 0.0});
+  std::vector<double> b(N, 1.0);
 
   // Prepare variables
   std::vector<std::complex<double>> x(M*N, {0.0, 0.0});
-  std::vector<std::complex<double>> w(N, {0.0, 0.0}), u(N, {0.0, 0.0});
+  std::vector<double> w(N, 0.0), u(N, 0.0);
   std::vector<std::size_t> itr(M);
   std::vector<double>      res(M);
   std::size_t inner_iters; double inner_relres;
@@ -75,13 +75,13 @@ int main(int argc, char* argv[]) {
   auto start = std::chrono::high_resolution_clock::now();
 
   gsi_sminres::generalized::Solver solver(N, M);
-  gsi_sminres::extras::cg(B, w, b, N, 1e-13, &inner_iters, &inner_relres);
+  gsi_sminres::extras::cg_r(B, w, b, N, 1e-13, &inner_iters, &inner_relres);
   solver.initialize(x, b, w, sigma, 1e-13);
   for (std::size_t j = 0; j < 10*N; ++j) {
-    gsi_sminres::sparse::SpMV(A, w, u);
-    solver.glanczos_pre(u);
-    gsi_sminres::extras::cg(B, w, u, N, 1e-13, &inner_iters, &inner_relres);
-    solver.glanczos_pst(w, u);
+    gsi_sminres::sparse::SpMV_r(A, w, u);
+    solver.glanczos_pre_r(u);
+    gsi_sminres::extras::cg_r(B, w, u, N, 1e-13, &inner_iters, &inner_relres);
+    solver.glanczos_pst_r(w, u);
     if (solver.update(x)) {
       break;
     }
@@ -95,12 +95,15 @@ int main(int argc, char* argv[]) {
   double sec = std::chrono::duration<double>(end - start).count();
   std::cout << "# time = " << sec << " s" << std::endl;
   for (std::size_t m = 0; m < M; ++m) {
+    const auto A_cmplx = gsi_sminres::io::load_mm_csr(Aname, N);
+    const auto B_cmplx = gsi_sminres::io::load_mm_csr(Aname, N);
+    std::vector<std::complex<double>> b_cmplx(N, {1.0, 0.0});
     std::vector<std::complex<double>> ans(x.begin()+m*N, x.begin()+(m+1)*N);
     std::vector<std::complex<double>> tmp(N), tmpB(N);
-    gsi_sminres::sparse::SpMV(A, ans, tmp);
-    gsi_sminres::sparse::SpMV(B, ans, tmpB);
+    gsi_sminres::sparse::SpMV(A_cmplx, ans, tmp);
+    gsi_sminres::sparse::SpMV(B_cmplx, ans, tmpB);
     gsi_sminres::linalg::blas::zaxpy(N, sigma[m], tmpB, 0, tmp, 0);
-    gsi_sminres::linalg::blas::zaxpy(N, {-1.0, 0.0}, b,   0, tmp, 0);
+    gsi_sminres::linalg::blas::zaxpy(N, {-1.0, 0.0}, b_cmplx,   0, tmp, 0);
     double tmp_nrm = gsi_sminres::linalg::blas::dznrm2(N, tmp);
     std::cout << std::right
               << std::setw(2) << m << " "

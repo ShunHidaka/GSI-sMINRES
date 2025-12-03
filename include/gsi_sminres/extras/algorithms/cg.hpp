@@ -49,6 +49,14 @@ namespace gsi_sminres {
               std::size_t*                             iters = nullptr,
               double*                                  relres = nullptr);
 
+      bool cg_r(const sparse::CSRMatrix_r& A,
+                std::vector<double>&       x,
+                const std::vector<double>& b,
+                std::size_t                max_iter,
+                double                     rtol,
+                std::size_t*               iters = nullptr,
+                double*                    relres = nullptr);
+
   }  // namespace extras
 }  // namespace gsi_sminres
 

@@ -75,6 +75,19 @@ namespace gsi_sminres {
                       std::vector<std::complex<double>>& w,
                       const std::vector<std::complex<double>>& sigma,
                       const double rtol);
+      /**
+       * \brief Real-valued variant of initialize for real A, B.
+       * \param[out]    x     Approximate solutions (row-major, x[m*N+i] size = matrix_size * shift_size).
+       * \param[in]     b     Right-hand side vector (size = matrix_size).
+       * \param[in,out] w     Pre-processed right-hand side \f$ B^{-1}b \f$ (size = matrix_size).
+       * \param[in]     sigma Vector of shift parameters (size = shift_size).
+       * \param[in]     rtol  Convergence tolerance for relative residuals.
+       */
+      void initialize_r(std::vector<std::complex<double>>& x,
+                      const std::vector<double>& b,
+                      std::vector<double>& w,
+                      const std::vector<std::complex<double>>& sigma,
+                      const double rtol);
 
       /**
        * \brief Pre-step of the generalized Lanczos process.
@@ -82,6 +95,12 @@ namespace gsi_sminres {
        * \param[in,out] u Vector containing \f$ u=Aw\f$ (size = N).
        */
       void glanczos_pre(std::vector<std::complex<double>>& u) noexcept;
+      /**
+       * \brief Real-valued pre-step of the generalized Lanczos process.
+       * \details The caller computes \f$ u \leftarrow A w \f$ and passes it here.
+       * \param[in,out] u Vector containing \f$ u=Aw\f$ (size = N).
+       */
+      void glanczos_pre_r(std::vector<double>& u) noexcept;
 
       /**
        * \brief Post-step of the generalized Lanczos process.
@@ -91,6 +110,14 @@ namespace gsi_sminres {
        */
       void glanczos_pst(std::vector<std::complex<double>>& w,
                         std::vector<std::complex<double>>& u) noexcept;
+      /**
+       * \brief Real-valued post-step of the generalized Lanczos process.
+       * \details The caller computes \f$ w \leftarrow B^{-1} u \f$ and passes it back.
+       * \param[in,out] w Vector containing \f$ w = B^{-1}u \f$ (size = N).
+       * \param[in,out] u Vector which used in `glanczos_pre()` (size=N).
+       */
+      void glanczos_pst_r(std::vector<double>& w,
+                          std::vector<double>& u) noexcept;
 
       /**
        * \brief Update the approximate solutions and check convergence.
@@ -131,6 +158,10 @@ namespace gsi_sminres {
       double beta_prev_{}, beta_curr_{}; ///< beta coefficients (previous and current)
       std::vector<std::complex<double>> w_prev_, w_curr_, w_next_; ///< Lanczos basis vectors
       std::vector<std::complex<double>> u_prev_, u_curr_, u_next_; ///< Auxiliary vectors
+      // Real-valued generalized Lanczos mode and work vectors (allocated lazily).
+      bool real_lanczos_mode_{false};
+      std::vector<double> w_prev_r_, w_curr_r_, w_next_r_; ///< Real Lanczos basis vectors
+      std::vector<double> u_prev_r_, u_curr_r_, u_next_r_; ///< Real Auxiliary vectors
 
       // tridiagonal / Givens data for MINRES updates
       /**
