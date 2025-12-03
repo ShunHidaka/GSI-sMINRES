@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
 
   gsi_sminres::generalized::Solver solver(N, M);
   gsi_sminres::extras::cg_r(B, w, b, N, 1e-13, &inner_iters, &inner_relres);
-  solver.initialize(x, b, w, sigma, 1e-13);
+  solver.initialize_r(x, b, w, sigma, 1e-13);
   for (std::size_t j = 0; j < 10*N; ++j) {
     gsi_sminres::sparse::SpMV_r(A, w, u);
     solver.glanczos_pre_r(u);
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
   std::cout << "# time = " << sec << " s" << std::endl;
   for (std::size_t m = 0; m < M; ++m) {
     const auto A_cmplx = gsi_sminres::io::load_mm_csr(Aname, N);
-    const auto B_cmplx = gsi_sminres::io::load_mm_csr(Aname, N);
+    const auto B_cmplx = gsi_sminres::io::load_mm_csr(Bname, N);
     std::vector<std::complex<double>> b_cmplx(N, {1.0, 0.0});
     std::vector<std::complex<double>> ans(x.begin()+m*N, x.begin()+(m+1)*N);
     std::vector<std::complex<double>> tmp(N), tmpB(N);
