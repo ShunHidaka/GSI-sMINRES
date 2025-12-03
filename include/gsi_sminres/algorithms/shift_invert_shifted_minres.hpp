@@ -77,6 +77,22 @@ namespace gsi_sminres {
                       const std::vector<std::complex<double>>& sigma,
                       const double omega,
                       const double rtol);
+      /**
+       * \brief Real-valued variant of initialize for real A, B and real vectors.
+       * \details The caller prepares: \f$ v \to (A + \omega B)^{-1} b, Bv \to B v \f$.
+       * \param[out] x     Approximate solutions (row-major, x[m*N+i] size = matrix_size * shift_size).
+       * \param[out] v     Pre-processed right-hand side \f$ (A + \omega B)^{-1}b \f$ (size = matrix_size).
+       * \param[out] Bv    Vector to which is matrix-vector multiplication is applied (Bv <- B * v).
+       * \param[in]  sigma Vector of shift parameters (size = shift_size).
+       * \param[in]  omega Shift-Invert parameter (real).
+       * \param[in]  rtol  Convergence tolerance for relative residuals.
+       */
+      void initialize_r(std::vector<std::complex<double>>& x,
+                        std::vector<double>& v,
+                        std::vector<double>& Bv,
+                        const std::vector<std::complex<double>>& sigma,
+                        const double omega,
+                        const double rtol);
 
       /**
        * \brief Applies the "pre" stage of M-inner-product Lanczos (steps 3.1 -- 3.4).
@@ -86,6 +102,14 @@ namespace gsi_sminres {
        */
       void sislanczos_pre(std::vector<std::complex<double>>& v,
                           const std::vector<std::complex<double>>& Bv) noexcept;
+      /**
+       * \brief Real-valued "pre" stage of M-inner-product Lanczos (steps 3.1 -- 3.4).
+       * \details The caller prepares: \f$ v \to (A + \omega B)^{-1} B v_j\f$ and provides \f$ Bv_j \f$.
+       * \param[in]    Bv Vector to which is matrix-vector multiplication is applied (Bv \f$ \to \f$ B * v).
+       * \param[in,out] v Vector to which is applied the operator \f$ (A + \omega B)^{-1} B \f$ (v \f$ \to \f$ (A + omega B)^{-1} Bv) (size = N).
+       */
+      void sislanczos_pre_r(std::vector<double>& v,
+                            const std::vector<double>& Bv) noexcept;
 
       /**
        * \brief Applies the "post" stage of M-inner-product Lanczos (steps 3.5 -- 3.6)
@@ -95,6 +119,14 @@ namespace gsi_sminres {
        */
       void sislanczos_pst(std::vector<std::complex<double>>& v,
                           std::vector<std::complex<double>>& Bv) noexcept;
+      /**
+       * \brief Real-valued "post" stage of M-inner-product Lanczos (steps 3.5 -- 3.6)
+       * \details The caller prepares: \f$ Bv <- B v \f$.
+       * \param[in,out] v  sislanczos_pre の結果をそのまま使う (size = N).
+       * \param[in,out] Bv Vector to which is matrix-vector multiplication is applied (Bv <- B * v).
+       */
+      void sislanczos_pst_r(std::vector<double>& v,
+                            std::vector<double>& Bv) noexcept;
 
       /**
        * \brief Update the approximate solutions and check convergence.
@@ -135,6 +167,11 @@ namespace gsi_sminres {
       double alpha_{};                   ///< alpha coefficient
       double beta_prev_{}, beta_curr_{}; ///< beta coefficients (previous and current)
       std::vector<std::complex<double>> v_prev_, v_curr_, v_next_; ///< Lanczos basis vectors
+      // Real-valued Lanczos mode and work vectors (allocated lazily).
+      bool real_lanczos_mode_{false}; ///< true if real-valued Lanczos is used
+      std::vector<double> v_prev_r_;  ///< Real Lanczos basis v_{k-1}
+      std::vector<double> v_curr_r_;  ///< Real Lanczos basis v_{k}
+      std::vector<double> v_next_r_;  ///< Real Lanczos basis v_{k+1}
 
       // tridiagonal / Givens data for MINRES updates
       /**

@@ -48,6 +48,8 @@ namespace gsi_sminres {
                             const std::vector<std::complex<double>>& sigma,
                             const double omega,
                             const double rtol) {
+      real_lanczos_mode_ = false; // Complex-valued Lanczos mode
+
       std::fill(x.begin(), x.end(), std::complex<double>{0.0,0.0});
       r0_norm_ = std::sqrt( std::max(0.0, std::real(linalg::blas::zdotc(matrix_size_, v, 0, Bv, 0))) );
       if (r0_norm_ < rtol) {
@@ -59,6 +61,40 @@ namespace gsi_sminres {
       linalg::blas::zdscal(matrix_size_, 1.0/r0_norm_,  v);
       linalg::blas::zdscal(matrix_size_, 1.0/r0_norm_, Bv);
       linalg::blas::zcopy(matrix_size_, v, 0, v_curr_, 0);
+      beta_prev_ = 0.0;
+      iter_      = 1;
+      std::fill(h_.begin(), h_.end(), r0_norm_);
+      linalg::blas::zcopy(shift_size_, sigma, 0, sigma_, 0);
+      omega_ = omega;
+      rtol_ = rtol;
+    }
+    void Solver::initialize_r(std::vector<std::complex<double>>& x,
+                              std::vector<double>& v,
+                              std::vector<double>& Bv,
+                              const std::vector<std::complex<double>>& sigma,
+                              const double omega,
+                              const double rtol) {
+      real_lanczos_mode_ = true;
+
+      std::fill(x.begin(), x.end(), std::complex<double>{0.0,0.0});
+      r0_norm_ = std::sqrt( std::max(0.0, linalg::blas::ddot(matrix_size_, v, 0, Bv, 0)) );
+      if (r0_norm_ < rtol) {
+        for (std::size_t m = 0; m < shift_size_; ++m) is_conv_[m] = 1u;
+        conv_num_ = shift_size_;
+        std::fill(h_.begin(), h_.end(), r0_norm_);
+        return;
+      }
+      v_prev_r_.assign(matrix_size_, 0.0);
+      v_curr_r_.assign(matrix_size_, 0.0);
+      v_next_r_.assign(matrix_size_, 0.0);
+      linalg::blas::dscal(matrix_size_, 1.0/r0_norm_,  v);
+      linalg::blas::dscal(matrix_size_, 1.0/r0_norm_, Bv);
+      linalg::blas::dcopy(matrix_size_, v, 0, v_curr_r_, 0);
+      for (std::size_t i = 0; i < matrix_size_; ++i) {
+        v_curr_[i] = std::complex<double>(v_curr_r_[i], 0.0);
+      }
+      beta_prev_ = 0.0;
+      iter_      = 1;
       std::fill(h_.begin(), h_.end(), r0_norm_);
       linalg::blas::zcopy(shift_size_, sigma, 0, sigma_, 0);
       omega_ = omega;
@@ -71,6 +107,12 @@ namespace gsi_sminres {
       linalg::blas::zaxpy(matrix_size_, -beta_prev_, v_prev_, 0,  v, 0);
       linalg::blas::zaxpy(matrix_size_, -alpha_,     v_curr_, 0,  v, 0);
     }
+    void Solver::sislanczos_pre_r(std::vector<double>& v,
+                                  const std::vector<double>& Bv) noexcept {
+      alpha_ = linalg::blas::ddot(matrix_size_, Bv, 0, v, 0);
+      linalg::blas::daxpy(matrix_size_, -beta_prev_, v_prev_r_, 0,  v, 0);
+      linalg::blas::daxpy(matrix_size_, -alpha_,     v_curr_r_, 0,  v, 0);
+    }
 
     void Solver::sislanczos_pst(std::vector<std::complex<double>>& v,
                                 std::vector<std::complex<double>>& Bv) noexcept {
@@ -78,6 +120,13 @@ namespace gsi_sminres {
       linalg::blas::zdscal(matrix_size_, 1.0/beta_curr_, v);
       linalg::blas::zdscal(matrix_size_, 1.0/beta_curr_, Bv);
       linalg::blas::zcopy(matrix_size_, v, 0, v_next_, 0);
+    }
+    void Solver::sislanczos_pst_r(std::vector<double>& v,
+                                  std::vector<double>& Bv) noexcept {
+      beta_curr_ = std::sqrt( linalg::blas::ddot(matrix_size_, v, 0, Bv, 0) );
+      linalg::blas::dscal(matrix_size_, 1.0/beta_curr_, v);
+      linalg::blas::dscal(matrix_size_, 1.0/beta_curr_, Bv);
+      linalg::blas::dcopy(matrix_size_, v, 0, v_next_r_, 0);
     }
 
     [[nodiscard]] bool Solver::update(std::vector<std::complex<double>>& x) noexcept {
@@ -117,8 +166,16 @@ namespace gsi_sminres {
         Gs_[m][0] = Gs_[m][1]; Gs_[m][1] = Gs_[m][2];
       }
       beta_prev_ = beta_curr_;
-      std::swap(v_curr_, v_prev_);
-      std::swap(v_next_, v_curr_);
+      if (real_lanczos_mode_) {
+        std::swap(v_curr_r_, v_prev_r_);
+        std::swap(v_next_r_, v_curr_r_);
+        for (std::size_t i = 0; i < matrix_size_; ++i) {
+          v_curr_[i] = std::complex<double>(v_curr_r_[i], 0.0);
+        }
+      } else {
+        std::swap(v_curr_, v_prev_);
+        std::swap(v_next_, v_curr_);
+      }
       iter_++;
       if (conv_num_ >= shift_size_) {
         return true;
@@ -128,8 +185,6 @@ namespace gsi_sminres {
 
     void Solver::finalize(std::vector<std::size_t>& conv_itr,
                           std::vector<double>&      conv_res) const {
-      // 当初はメモリの解放などを行う予定だったが
-      // (動的な確保をおこなっていないため)不要なので収束までの反復回数と残差のノルムを返す関数とする
       //conv_itr = conv_iter_;
       for (std::size_t m = 0; m < shift_size_; ++m)
         conv_itr[m] = (is_conv_[m] != 0u) ? conv_iter_[m] : iter_;

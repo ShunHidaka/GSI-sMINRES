@@ -50,10 +50,15 @@ constexpr inline blas_int to_blas_int(std::size_t val) noexcept {
 extern "C" {
   void zrotg_(std::complex<double> *a, std::complex<double> *b,
               double *c, std::complex<double> *s);
+  void drotg_(double *a, double *b, double *c, double *s);
   void zrot_(const blas_int *n,
              std::complex<double> *x, const blas_int *incx,
              std::complex<double> *y, const blas_int *incy,
              const double *c, const std::complex<double> *s);
+  void drot_(const blas_int *n,
+             double *x, const blas_int *incx,
+             double *y, const blas_int *incy,
+             const double *c, const double *s);
 }
 
 namespace gsi_sminres {
@@ -273,6 +278,10 @@ namespace gsi_sminres {
                         double& c, std::complex<double>& s) noexcept {
         zrotg_(&a, &b, &c, &s);
       }
+      inline void drotg(double& a, double& b,
+                        double& c, double& s) noexcept {
+        drotg_(&a, &b, &c, &s);
+      }
 
       // ========== Level-1 rotg ==========
       /**
@@ -295,6 +304,15 @@ namespace gsi_sminres {
         blas_int nn = to_blas_int(n);
         blas_int ix = to_blas_int(incx), iy = to_blas_int(incy);
         zrot_(&nn, x.data()+x_offset, &ix, y.data()+y_offset, &iy, &c, &s);
+      }
+      inline void drot(std::size_t n,
+                       std::vector<double>& x, std::size_t x_offset,
+                       std::vector<double>& y, std::size_t y_offset,
+                       double c, double s,
+                       std::size_t incx=1, std::size_t incy=1) noexcept {
+        blas_int nn = to_blas_int(n);
+        blas_int ix = to_blas_int(incx), iy = to_blas_int(incy);
+        drot_(&nn, x.data()+x_offset, &ix, y.data()+y_offset, &iy, &c, &s);
       }
 
     }  // namespace blas
