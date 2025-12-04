@@ -34,7 +34,7 @@
 
 // size_t to blas_int casting function
 // デバッグオプションがあるときだけエラーを出したい、要検討
-#if defined(NDEBUG)
+#ifndef NDEBUG
   static_assert(std::is_signed_v<blas_int>, "blas_int must be signed");
   static_assert(sizeof(blas_int) == 4 || sizeof(blas_int) == 8, "unexpected blas_int width");
   struct [[deprecated("BLAS: blas_int is narrower than std::size_t;"
