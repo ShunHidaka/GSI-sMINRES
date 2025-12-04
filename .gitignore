@@ -1,4 +1,7 @@
 build/
+
 examples/*.out
+examples/data/*.mtx
+
 docs/html
 docs/latex
