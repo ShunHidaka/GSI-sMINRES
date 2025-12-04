@@ -4,6 +4,11 @@ cmake_minimum_required(VERSION 3.16)
 # Project
 # =========================
 project(GSI_sMINRES VERSION 1.0.0 LANGUAGES CXX)
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "No build type selected, defaulting to Release")
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
+endif()
 
 # =========================
 # C++ standard & flags
@@ -30,10 +35,11 @@ endif()
 # =========================
 # Options
 # =========================
-option(USE_OPENMP                     "Enable OpenMP parallelization" ON)
-option(GSI_SMINRES_BUILD_SHARED       "Build shared library"           ON)
-option(GSI_SMINRES_BUILD_STATIC       "Build static library"           ON)
-option(GSI_SMINRES_BUILD_EXAMPLES     "Build example programs"         ON)
+option(USE_OPENMP                  "Enable OpenMP parallelization"    ON)
+option(USE_OPENMP_UPDATE           "Enable OpenMP parallel update()"  ON)
+option(GSI_SMINRES_BUILD_SHARED    "Build shared library"             ON)
+option(GSI_SMINRES_BUILD_STATIC    "Build static library"             ON)
+option(GSI_SMINRES_BUILD_EXAMPLES  "Build example programs"           ON)
 
 # =========================
 # OpenMP
@@ -125,6 +131,23 @@ if(GSI_SMINRES_BUILD_STATIC)
     OUTPUT_NAME gsi_sminres
     POSITION_INDEPENDENT_CODE ON)
   add_library(gsi_sminres::gsi_sminres_static ALIAS gsi_sminres_static)
+endif()
+
+# =========================
+# OpenMP-parallel update() over shifts
+# =========================
+if(USE_OPENMP_UPDATE)
+  if(NOT USE_OPENMP)
+    message(WARNING "USE_OPENMP_UPDATE is ON but USE_OPENMP is off; disabling OpenMP parallelization of update().")
+  elseif(NOT OPENMP_CXX_TARGET)
+    message(WARNING "USE_OPENMP_UPDATE is ON but OpenMP was not found; disabling OpenMP parallelization of update().")
+  else()
+    foreach(tgt gsi_sminres gsi_sminres_static)
+      if(TARGET ${tgt})
+        target_compile_definitions(${tgt} PUBLIC GSI_SMINRES_USE_OMP_UPDATE)
+      endif()
+    endforeach()
+  endif()
 endif()
 
 # =========================

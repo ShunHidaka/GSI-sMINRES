@@ -71,6 +71,7 @@ cmake --install build
 | `-DCMAKE_INSTALL_PREFIX=...`         | `"$HOME/gsminres_install"`   | Install destination          |
 | `-DGSI_SMINRES_BUILD_EXAMPLES=ON`    | `ON`                         | Build example programs       |
 | `-DUSE_OPENMP`                       | `ON`                         | Enable OpenMP if available   |
+| `-DUSE_OPENMP_UPDATE`                | `ON`                         | Enable OpenMP parallel update() |
 | `-DCMAKE_PREFIX_PATH=...`            | ``                           | Add path to find external libraries |
 
 > If BLAS/LAPACK are not auto-detected, consider adding `CMAKE_PREFIX_PATH` or explicitly setting `BLAS_LIBRARIES` / `LAPACK_LIBRARIES`.
