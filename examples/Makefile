@@ -20,20 +20,26 @@ ALG_MR  := $(ROOT)/src/extras/algorithms/minres_pencil.cpp
 .PHONY: all std gen sis clean
 all: std gen sis
 
-std: a_std_csr.out a_std_zhp.out
+std: a_std_csr.out a_std_csr_r.out a_std_zhp.out
 a_std_csr.out: example_std_csr.cpp $(ALG_STD) $(IO_CSR)
+	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
+a_std_csr_r.out: example_std_csr_r.cpp $(ALG_STD) $(IO_CSR)
 	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
 a_std_zhp.out: example_std_zhp.cpp $(ALG_STD) $(IO_ZHP)
 	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
 
-gen: a_gen_csr.out a_gen_zhp.out
+gen: a_gen_csr.out a_gen_csr_r.out a_gen_zhp.out
 a_gen_csr.out: example_gen_csr.cpp $(ALG_GEN) $(IO_CSR) $(ALG_CG)
+	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
+a_gen_csr_r.out: example_gen_csr_r.cpp $(ALG_GEN) $(IO_CSR) $(ALG_CG)
 	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
 a_gen_zhp.out: example_gen_zhp.cpp $(ALG_GEN) $(IO_ZHP)
 	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
 
-sis: a_sis_csr.out a_sis_zhp.out
+sis: a_sis_csr.out a_sis_csr_r.out a_sis_zhp.out
 a_sis_csr.out: example_sis_csr.cpp $(ALG_SIS) $(IO_CSR) $(ALG_MR)
+	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
+a_sis_csr_r.out: example_sis_csr_r.cpp $(ALG_SIS) $(IO_CSR) $(ALG_MR)
 	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)
 a_sis_zhp.out: example_sis_zhp.cpp $(ALG_SIS) $(IO_ZHP)
 	$(CXX) $(CXXFLAGS) $(INC) $^ -o $@ $(BLAS_LIB)

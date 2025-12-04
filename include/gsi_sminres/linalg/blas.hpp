@@ -266,7 +266,7 @@ namespace gsi_sminres {
         return cblas_dznrm2(nn, x.data()+x_offset, ix);
       }
 
-      // ========== Level-1: rot ==========
+      // ========== Level-1: rotg ==========
       /**
        * \brief Compute Givens rotation parameters.
        * \param[in,out] a First component, overwritten.
@@ -283,7 +283,7 @@ namespace gsi_sminres {
         drotg_(&a, &b, &c, &s);
       }
 
-      // ========== Level-1 rotg ==========
+      // ========== Level-1 rot ==========
       /**
        * \brief Apply Givens rotation to vector pair (x, y).
        * \param[in]     n        Number of elements to apply.
@@ -313,6 +313,38 @@ namespace gsi_sminres {
         blas_int nn = to_blas_int(n);
         blas_int ix = to_blas_int(incx), iy = to_blas_int(incy);
         drot_(&nn, x.data()+x_offset, &ix, y.data()+y_offset, &iy, &c, &s);
+      }
+      // ========== scalar Givens application (no BLAS) ==========
+      /**
+       * \brief Apply a complex Givens rotation to scalar pair \p (x, y)
+       * \details This helper applies the 2×2 unitary Givens matrix
+       *          This routine is intended for the scalar case (\f$n=1\f$) used in the
+       *          shifted MINRES recurrences. Implementing the update explicitly avoids
+       *          the overhead of calling the BLAS \c zrot kernel for a single element.
+       * \param[in]     c Cosine parameter of the Givens rotation (real).
+       * \param[in]     s Sine parameter of the Givens rotation (complex).
+       * \param[in,out] x First scalar to be rotated.
+       * \param[in,out] y Second scalar to be rotated.
+       */
+      inline void apply_givens(const double c, const std::complex<double>& s,
+                               std::complex<double>& x,
+                               std::complex<double>& y) noexcept {
+        const auto x0 = x, y0 = y;
+        x = c*x0 + s*y0;
+        y = -std::conj(s)*x0 + c*y0;
+      }
+      /**
+       * \brief Apply a real Givens rotation to scalar pair \p (x, y)
+       * \param[in]     c Cosine parameter of the Givens rotation (real).
+       * \param[in]     s Sine parameter of the Givens rotation (real).
+       * \param[in,out] x First scalar to be rotated.
+       * \param[in,out] y Second scalar to be rotated.
+       */
+      inline void apply_givens_r(const double c, const double s,
+                                 double& x,double y) noexcept {
+        const double x0 = x, y0 = y;
+        x =  c*x0 + s*y0;
+        y = -s*x0 + c*y0;
       }
 
     }  // namespace blas

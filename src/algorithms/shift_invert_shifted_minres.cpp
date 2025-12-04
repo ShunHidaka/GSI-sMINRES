@@ -27,10 +27,6 @@ namespace gsi_sminres {
         v_prev_(matrix_size, {0.0, 0.0}),
         v_curr_(matrix_size, {0.0, 0.0}),
         v_next_(matrix_size, {0.0, 0.0}),
-        T_prev2_(1, {0.0, 0.0}),
-        T_prev_( 1, {0.0, 0.0}),
-        T_curr_( 1, {0.0, 0.0}),
-        T_next_( 1, {0.0, 0.0}),
         Gc_(shift_size, std::array<double,3>{0.0, 0.0, 0.0}),
         Gs_(shift_size, std::array<std::complex<double>,3>{{{0.0,0.0}, {0.0,0.0}, {0.0,0.0}}}),
         p_prev2_(shift_size*matrix_size, {0.0, 0.0}),
@@ -132,27 +128,28 @@ namespace gsi_sminres {
     [[nodiscard]] bool Solver::update(std::vector<std::complex<double>>& x) noexcept {
       std::swap(p_prev_, p_prev2_);
       std::swap(p_curr_, p_prev_);
+#pragma omp parallel for
       for (std::size_t m = 0; m < shift_size_; ++m) {
         if (is_conv_[m] != 0u) {
           continue;
         }
-        T_prev2_[0] = 0.0;
-        T_prev_[0]  = (sigma_[m] - omega_) * beta_prev_;
-        T_curr_[0]  = 1.0 + (sigma_[m] - omega_) * alpha_;
-        T_next_[0]  = (sigma_[m] - omega_) * beta_curr_;
+        std::complex<double> T_prev2_ = 0.0;
+        std::complex<double> T_prev_  = (sigma_[m] - omega_) * beta_prev_;
+        std::complex<double> T_curr_  = 1.0 + (sigma_[m] - omega_) * alpha_;
+        std::complex<double> T_next_  = (sigma_[m] - omega_) * beta_curr_;
         if (iter_ >= 3) {
-          linalg::blas::zrot(1, T_prev2_, 0, T_prev_, 0, Gc_[m][0], Gs_[m][0]);
+          linalg::blas::apply_givens(Gc_[m][0], Gs_[m][0], T_prev2_, T_prev_);
         }
         if (iter_ >= 2) {
-          linalg::blas::zrot(1, T_prev_,  0, T_curr_, 0, Gc_[m][1], Gs_[m][1]);
+          linalg::blas::apply_givens(Gc_[m][1], Gs_[m][1], T_prev_, T_curr_);
         }
-        linalg::blas::zrotg(T_curr_[0], T_next_[0], Gc_[m][2], Gs_[m][2]);
-        //linalg::lapack::zlartg(T_curr_[0], T_next_[0], Gc_[m][2], Gs_[m][2]);
+        linalg::blas::zrotg(T_curr_, T_next_, Gc_[m][2], Gs_[m][2]);
+        //linalg::lapack::zlartg(T_curr_, T_next_, Gc_[m][2], Gs_[m][2]);
         std::size_t offset = m*matrix_size_;
         linalg::blas::zcopy(matrix_size_, v_curr_, 0, p_curr_, offset);
-        linalg::blas::zaxpy(matrix_size_, -T_prev2_[0], p_prev2_, offset, p_curr_, offset);
-        linalg::blas::zaxpy(matrix_size_, -T_prev_[0],  p_prev_,  offset, p_curr_, offset);
-        linalg::blas::zscal(matrix_size_, 1.0/T_curr_[0], p_curr_, offset);
+        linalg::blas::zaxpy(matrix_size_, -T_prev2_, p_prev2_, offset, p_curr_, offset);
+        linalg::blas::zaxpy(matrix_size_, -T_prev_,  p_prev_,  offset, p_curr_, offset);
+        linalg::blas::zscal(matrix_size_, 1.0/T_curr_, p_curr_, offset);
         linalg::blas::zaxpy(matrix_size_, r0_norm_*Gc_[m][2]*f_[m], p_curr_, offset, x, offset);
         f_[m] = -std::conj(Gs_[m][2]) * f_[m];
         h_[m] = std::abs(-std::conj(Gs_[m][2])) * h_[m];

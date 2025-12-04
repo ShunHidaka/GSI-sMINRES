@@ -163,17 +163,24 @@ namespace gsi_sminres {
       std::vector<double> w_prev_r_, w_curr_r_, w_next_r_; ///< Real Lanczos basis vectors
       std::vector<double> u_prev_r_, u_curr_r_, u_next_r_; ///< Real Auxiliary vectors
 
-      // tridiagonal / Givens data for MINRES updates
+      // Givens data for MINRES updates
       /**
-       * @brief Elements of the tridiagonal matrix by Lanczos process
-       *        These vectors store the column-wise elements of a tridiagonal matrix,
-       *        used during the Lanczos process. Although each vector contains only one
-       *        element in practice, they are wrapped in 'std::vector' to be compatible
-       *        with my BLAS routine wrapper that require vector inputs.
+       * @brief Givens rotation parameters used in the MINRES recurrences.
+       *
+       * @details For each shift \f$m\f$, the arrays \c Gc_[m] and \c Gs_[m] store the
+       *          cosine and sine parameters of the (up to) three Givens rotations
+       *          applied to the local tridiagonal entries in \c update().
+       *
+       *          Concretely, \c Gc_[m][j] holds the real cosine \f$c_j^{(m)}\f$ and
+       *          \c Gs_[m][j] holds the complex sine \f$s_j^{(m)}\f$ for
+       *          \f$j=0,1,2\f$. The actual tridiagonal elements are now handled as
+       *          scalar temporaries inside \c update() and are no longer stored as
+       *          member vectors, since using BLAS for the \f$n=1\f$ rotations was
+       *          unnecessarily expensive.
        */
-      std::vector<std::complex<double>> T_prev2_, T_prev_, T_curr_, T_next_;
-      std::vector<std::array<double,3>>               Gc_; ///< Givens rotation matrix elements "c"
-      std::vector<std::array<std::complex<double>,3>> Gs_; ///< Givens rotation matrix elements "s"
+      std::vector<std::array<double,3>>               Gc_; ///< Givens rotation cosines for each shift
+      std::vector<std::array<std::complex<double>,3>> Gs_; ///< Givens rotation sines for each shift
+
 
       // auxiliary buffers
       std::vector<std::complex<double>> p_prev2_, p_prev_, p_curr_; ///< Auxiliary vectors (shift*matrix)
