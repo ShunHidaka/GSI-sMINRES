@@ -44,6 +44,8 @@ namespace gsi_sminres {
       real_lanczos_mode_ = false; // Complex-valued Lanczos mode
 
       std::fill(x.begin(), x.end(), std::complex<double>{0.0,0.0});
+      linalg::blas::zcopy(shift_size_, sigma, 0, sigma_, 0);
+      rtol_ = rtol;
       r0_norm_ = linalg::blas::dznrm2(matrix_size_, b);
       if (r0_norm_ < rtol) {
         for (std::size_t m = 0; m < shift_size_; ++m) is_conv_[m] = 1u;
@@ -57,8 +59,10 @@ namespace gsi_sminres {
       beta_prev_ = 0.0;
       iter_      = 1;
       std::fill(h_.begin(), h_.end(), r0_norm_);
-      linalg::blas::zcopy(shift_size_, sigma, 0, sigma_, 0);
-      rtol_ = rtol;
+      std::fill(f_.begin(), f_.end(), std::complex<double>(1.0, 0.0));
+      std::fill(is_conv_.begin(), is_conv_.end(), 0u);
+      std::fill(conv_iter_.begin(), conv_iter_.end(), 0);
+      conv_num_ = 0;
     }
 
     void Solver::initialize_r(std::vector<std::complex<double>>& x,
@@ -69,6 +73,8 @@ namespace gsi_sminres {
       real_lanczos_mode_ = true; // Real-valued Lanczos mode
 
       std::fill(x.begin(), x.end(), std::complex<double>{0.0,0.0});
+      linalg::blas::zcopy(shift_size_, sigma, 0, sigma_, 0);
+      rtol_ = rtol;
       r0_norm_ = linalg::blas::dnrm2(matrix_size_, b);
       if (r0_norm_ < rtol) {
         for (std::size_t m = 0; m < shift_size_; ++m) is_conv_[m] = 1u;
@@ -88,8 +94,10 @@ namespace gsi_sminres {
       beta_prev_ = 0.0;
       iter_      = 1;
       std::fill(h_.begin(), h_.end(), r0_norm_);
-      linalg::blas::zcopy(shift_size_, sigma, 0, sigma_, 0);
-      rtol_ = rtol;
+      std::fill(f_.begin(), f_.end(), std::complex<double>(1.0, 0.0));
+      std::fill(is_conv_.begin(), is_conv_.end(), 0u);
+      std::fill(conv_iter_.begin(), conv_iter_.end(), 0);
+      conv_num_ = 0;
     }
 
     void Solver::lanczos(std::vector<std::complex<double>>& v,
@@ -117,7 +125,8 @@ namespace gsi_sminres {
     [[nodiscard]] bool Solver::update(std::vector<std::complex<double>>& x) noexcept {
       std::swap(p_prev_, p_prev2_);
       std::swap(p_curr_, p_prev_);
-#pragma omp parallel for
+      std::size_t local_conv_num = 0;
+#pragma omp parallel for reduction(+:local_conv_num)
       for (std::size_t m = 0; m < shift_size_; ++m) {
         if (is_conv_[m] != 0u) {
           continue;
@@ -143,7 +152,7 @@ namespace gsi_sminres {
         f_[m] = -std::conj(Gs_[m][2]) * f_[m];
         h_[m] = std::abs(-std::conj(Gs_[m][2])) * h_[m];
         if (h_[m]/r0_norm_ < rtol_) {
-          conv_num_++;
+          local_conv_num++;
           is_conv_[m] = 1u;
           conv_iter_[m] = iter_;
           continue;
@@ -151,6 +160,7 @@ namespace gsi_sminres {
         Gc_[m][0] = Gc_[m][1]; Gc_[m][1] = Gc_[m][2];
         Gs_[m][0] = Gs_[m][1]; Gs_[m][1] = Gs_[m][2];
       }
+      conv_num_ += local_conv_num;
       beta_prev_ = beta_curr_;
       if (real_lanczos_mode_) {
         std::swap(v_curr_r_, v_prev_r_);

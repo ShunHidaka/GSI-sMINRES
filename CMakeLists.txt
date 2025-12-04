@@ -134,10 +134,13 @@ if(GSI_SMINRES_BUILD_EXAMPLES)
   set(_examples
     example_std_zhp
     example_std_csr
-    example_sis_zhp
-    example_sis_csr
+    example_std_csr_r
     example_gen_zhp
     example_gen_csr
+    example_gen_csr_r
+    example_sis_zhp
+    example_sis_csr
+    example_sis_csr_r
   )
 
   foreach(x ${_examples})
