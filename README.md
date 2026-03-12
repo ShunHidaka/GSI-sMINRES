@@ -33,7 +33,7 @@ Provided solvers (three families):
 - C++17 compiler (GCC ≥ 9 / Clang ≥ 10 recommended)
 - **BLAS** (Netlib / OpenBLAS / MKL, etc.) — required by the core
 - **LAPACK** — used by examples / extras
-- CMake ≥ 3.18 and `make`
+- CMake ≥ 3.16 and `make`
 - (Optional) OpenMP (depending on your BLAS and whether you parallelize SpMV)
 
 ---
@@ -60,7 +60,7 @@ GSI-sMINRES/
 cmake -S . -B build
 cmake --build build -j
 
-# Install (default prefix e.g. $HOME/gsminres_install)
+# Install (default prefix e.g. $HOME/gsi-sminres_install)
 cmake --install build
 ```
 
