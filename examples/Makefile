@@ -1,5 +1,5 @@
 CXX      ?= g++
-CXXFLAGS ?= -std=c++17 -O2
+CXXFLAGS ?= -std=c++17 -O3 -DNDEBUG
 ROOT     ?= ..
 INC      := -I$(ROOT)/include
 BLAS_LIB := -lblas -llapack

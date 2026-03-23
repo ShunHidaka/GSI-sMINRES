@@ -93,6 +93,9 @@ int main(int argc, char* argv[]) {
 
   // Output results
   double sec = std::chrono::duration<double>(end - start).count();
+  std::cout << "# gsMINRES method (CSR, real)" << std::endl;
+  std::cout << "# A = " << Aname
+            << ", B = " << Bname << std::endl;
   std::cout << "# time = " << sec << " s" << std::endl;
   for (std::size_t m = 0; m < M; ++m) {
     const auto A_cmplx = gsi_sminres::io::load_mm_csr(Aname, N);

@@ -103,6 +103,9 @@ int main(int argc, char* argv[]) {
 
   // Output results
   double sec = std::chrono::duration<double>(end - start).count();
+  std::cout << "# sisMINRES method (CSR)" << std::endl;
+  std::cout << "# A = " << Aname
+            << ", B = " << Bname << std::endl;
   std::cout << "# time = " << sec << " s" << std::endl;
   for (std::size_t m = 0; m < M; ++m) {
     std::vector<std::complex<double>> ans(x.begin()+m*N, x.begin()+(m+1)*N);
